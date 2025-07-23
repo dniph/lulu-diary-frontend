@@ -9,6 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
+      
       <body>
         <nav className="bg-indigo-600 text-white p-4 flex space-x-4">
           <Link href="/login" className="hover:underline">
