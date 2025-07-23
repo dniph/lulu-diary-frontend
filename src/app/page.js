@@ -4,6 +4,9 @@ export default function Home() {
       <h1 className="text-4xl font-bold text-indigo-800">
         Lulu Diary está funcionando 🎉
       </h1>
+      <div className="text-6xl font-extrabold text-pink-500 underline">
+      ¡Tailwind funciona!
+      </div>
     </main>
   );
 }
