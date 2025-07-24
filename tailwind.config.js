@@ -6,7 +6,11 @@ module.exports = {
     "./src/components/**/*.{js,jsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        pixel: ['"Press Start 2P"', 'cursive'],
+      },
+    },
   },
   plugins: [],
 };

@@ -28,3 +28,9 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.font-pixel {
+  font-family: 'Press Start 2P', cursive !important;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}

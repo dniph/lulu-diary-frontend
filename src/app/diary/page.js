@@ -1,5 +1,5 @@
 'use client';
-import DayView from '@/components/DayView';
+
 import { useState } from 'react';
 
 const mockEntries = [
