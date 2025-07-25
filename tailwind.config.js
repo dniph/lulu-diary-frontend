@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         pixel: ['"Press Start 2P"', 'cursive'],
       },
+      colors: {},
     },
   },
   plugins: [],
