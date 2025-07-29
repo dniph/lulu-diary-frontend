@@ -8,6 +8,10 @@ export default function DayView() {
   const [entries, setEntries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [editingContent, setEditingContent] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
 
   useEffect(() => {
     async function fetchEntries() {
@@ -86,39 +90,192 @@ const handleDelete = async () => {
     }
   };
 
+  const handleEditTitle = () => {
+    const entry = entries[currentIndex];
+    setEditTitle(entry.title);
+    setEditingTitle(true);
+  };
+
+  const handleEditContent = () => {
+    const entry = entries[currentIndex];
+    setEditContent(entry.content);
+    setEditingContent(true);
+  };
+
+  const saveTitle = async () => {
+    const entry = entries[currentIndex];
+    try {
+      const res = await fetch(`http://localhost:5180/api/diaries/${entry.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...entry,
+          title: editTitle,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Error al actualizar el título');
+
+      // Actualizar el estado local
+      const updatedEntries = [...entries];
+      updatedEntries[currentIndex] = { ...entry, title: editTitle };
+      setEntries(updatedEntries);
+      setEditingTitle(false);
+    } catch (error) {
+      console.error('Error actualizando título:', error);
+      alert('Error al actualizar el título.');
+    }
+  };
+
+  const saveContent = async () => {
+    const entry = entries[currentIndex];
+    try {
+      const res = await fetch(`http://localhost:5180/api/diaries/${entry.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...entry,
+          content: editContent,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Error al actualizar el contenido');
+
+      // Actualizar el estado local
+      const updatedEntries = [...entries];
+      updatedEntries[currentIndex] = { ...entry, content: editContent };
+      setEntries(updatedEntries);
+      setEditingContent(false);
+    } catch (error) {
+      console.error('Error actualizando contenido:', error);
+      alert('Error al actualizar el contenido.');
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingTitle(false);
+    setEditingContent(false);
+    setEditTitle('');
+    setEditContent('');
+  };
+
   const formatDate = (dateString) =>
     format(parseISO(dateString), 'EEEE d MMMM yyyy', { locale: es });
 
   if (loading) return <p className="text-center mt-10">Cargando entradas...</p>;
   if (entries.length === 0) return <p className="text-center mt-10">No hay entradas para mostrar.</p>;
-
+  
   const entry = entries[currentIndex];
+  const isLastEntry = currentIndex === entries.length - 1;
+  console.log('Mostrando entrada del:', entry.createdAt);
+  console.log("Índice actual:", currentIndex);
+  console.log("Fecha actual:", entries[currentIndex]?.createdAt);
+  console.log("Todas las fechas:", entries.map((e) => e.createdAt));
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg">
       <h2 className="text-xl font-bold text-center text-gray-700 mb-2">
         {formatDate(entry.createdAt)}
       </h2>
-      <h1 className="text-2xl font-bold mb-4">{entry.title}</h1>
-      <p className="text-gray-700 mb-4">{entry.content}</p>
+      
+      {/* Título */}
+      <div className="mb-4">
+        {editingTitle ? (
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              className="flex-1 text-2xl font-bold border-2 border-blue-300 rounded px-2 py-1"
+              autoFocus
+            />
+            <button
+              onClick={saveTitle}
+              className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"
+            >
+              ✓
+            </button>
+            <button
+              onClick={cancelEdit}
+              className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded text-sm"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold flex-1">{entry.title}</h1>
+            <button
+              onClick={handleEditTitle}
+              className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm"
+            >
+              ✏️
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Contenido */}
+      <div className="mb-4">
+        {editingContent ? (
+          <div className="flex flex-col gap-2">
+            <textarea
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+              className="text-gray-700 border-2 border-blue-300 rounded px-2 py-1 min-h-[100px] resize-y"
+              autoFocus
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={saveContent}
+                className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"
+              >
+                Guardar
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded text-sm"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <p className="text-gray-700 flex-1">{entry.content}</p>
+            <button
+              onClick={handleEditContent}
+              className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm self-start"
+            >
+              ✏️
+            </button>
+          </div>
+        )}
+      </div>
+      <p className="text-sm text-gray-500 text-right italic"> Escrito el {formatDate(entry.createdAt)}</p>
       <div className="flex justify-between mt-6">
         <button
           onClick={handlePrev}
-          disabled={currentIndex === 0}
+          disabled={currentIndex === 0 || editingTitle || editingContent}
           className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
         >
           Anterior
         </button>
         <button
           onClick={handleDelete}
-          className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+          disabled={editingTitle || editingContent}
+          className="flex-1 mx-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded disabled:opacity-50"
         >
           Eliminar
         </button>
         <button
           onClick={handleNext}
-          disabled={currentIndex === entries.length - 1}
-          className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50"
+          disabled={currentIndex === entries.length - 1 || editingTitle || editingContent}
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50"
         >
           Siguiente
         </button>
