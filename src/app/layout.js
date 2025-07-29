@@ -17,6 +17,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <nav className="bg-indigo-600 text-white p-4 flex space-x-4">
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
           <Link href="/login" className="hover:underline">
             Login
           </Link>
