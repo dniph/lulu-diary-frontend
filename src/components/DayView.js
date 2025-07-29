@@ -58,6 +58,34 @@ export default function DayView() {
     }
   };
 
+const handleDelete = async () => {
+    const entryToDelete = entries[currentIndex];
+    if (!entryToDelete) return;
+
+    const confirmDelete = window.confirm(`¿Eliminar la entrada "${entryToDelete.title}"?`);
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`http://localhost:5180/api/diaries/${entryToDelete.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) throw new Error('Error al eliminar la entrada');
+
+      // Actualizar estado eliminando la entrada
+      const newEntries = entries.filter(e => e.id !== entryToDelete.id);
+      setEntries(newEntries);
+
+      // Ajustar currentIndex si es necesario
+      if (currentIndex >= newEntries.length) {
+        setCurrentIndex(newEntries.length - 1 >= 0 ? newEntries.length - 1 : 0);
+      }
+    } catch (error) {
+      console.error('Error eliminando entrada:', error);
+      alert('Error al eliminar la entrada.');
+    }
+  };
+
   const formatDate = (dateString) =>
     format(parseISO(dateString), 'EEEE d MMMM yyyy', { locale: es });
 
@@ -82,9 +110,15 @@ export default function DayView() {
           Anterior
         </button>
         <button
+          onClick={handleDelete}
+          className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+        >
+          Eliminar
+        </button>
+        <button
           onClick={handleNext}
           disabled={currentIndex === entries.length - 1}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50"
+          className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50"
         >
           Siguiente
         </button>
