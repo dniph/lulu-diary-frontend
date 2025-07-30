@@ -102,57 +102,33 @@ const handleDelete = async () => {
     setEditingContent(true);
   };
 
-  const saveTitle = async () => {
+  const saveChanges = async () => {
     const entry = entries[currentIndex];
     try {
       const res = await fetch(`http://localhost:5180/api/diaries/${entry.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...entry,
-          title: editTitle,
+          title: editTitle || entry.title,
+          content: editContent || entry.content,
         }),
       });
 
-      if (!res.ok) throw new Error('Error al actualizar el título');
+      if (!res.ok) throw new Error('Error al actualizar el diario');
 
-      // Actualizar el estado local
+      // Usar la respuesta del servidor para actualizar el estado local
+      const updatedEntry = await res.json();
       const updatedEntries = [...entries];
-      updatedEntries[currentIndex] = { ...entry, title: editTitle };
+      updatedEntries[currentIndex] = updatedEntry;
       setEntries(updatedEntries);
       setEditingTitle(false);
-    } catch (error) {
-      console.error('Error actualizando título:', error);
-      alert('Error al actualizar el título.');
-    }
-  };
-
-  const saveContent = async () => {
-    const entry = entries[currentIndex];
-    try {
-      const res = await fetch(`http://localhost:5180/api/diaries/${entry.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...entry,
-          content: editContent,
-        }),
-      });
-
-      if (!res.ok) throw new Error('Error al actualizar el contenido');
-
-      // Actualizar el estado local
-      const updatedEntries = [...entries];
-      updatedEntries[currentIndex] = { ...entry, content: editContent };
-      setEntries(updatedEntries);
       setEditingContent(false);
     } catch (error) {
-      console.error('Error actualizando contenido:', error);
-      alert('Error al actualizar el contenido.');
+      console.error('Error actualizando diario:', error);
+      alert('Error al actualizar el diario.');
     }
   };
 
@@ -194,7 +170,7 @@ const handleDelete = async () => {
               autoFocus
             />
             <button
-              onClick={saveTitle}
+              onClick={saveChanges}
               className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"
             >
               ✓
@@ -231,7 +207,7 @@ const handleDelete = async () => {
             />
             <div className="flex gap-2">
               <button
-                onClick={saveContent}
+                onClick={saveChanges}
                 className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"
               >
                 Guardar
@@ -256,7 +232,11 @@ const handleDelete = async () => {
           </div>
         )}
       </div>
-      <p className="text-sm text-gray-500 text-right italic"> Escrito el {formatDate(entry.createdAt)}</p>
+      <p className="text-sm text-gray-500 text-right italic">
+        {entry.updatedAt && entry.updatedAt !== entry.createdAt
+          ? `Editado el ${formatDate(entry.updatedAt)}`
+          : `Escrito el ${formatDate(entry.createdAt)}`}
+      </p>
       <div className="flex justify-between mt-6">
         <button
           onClick={handlePrev}
