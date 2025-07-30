@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { parseISO, format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-export default function DayView() {
+export default function DayView({ refreshTrigger = 0 }) {
   const [entries, setEntries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -24,21 +24,11 @@ export default function DayView() {
         data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         setEntries(data);
 
-        const today = new Date();
-        const todayIndex = data.findIndex((entry) =>
-          isSameDay(parseISO(entry.createdAt), today)
-        );
-
-        if (todayIndex !== -1) {
-          setCurrentIndex(todayIndex);
+        // Posicionar en la última entrada (la más reciente)
+        if (data.length > 0) {
+          setCurrentIndex(data.length - 1);
         } else {
-          const pastEntries = data.filter(entry => parseISO(entry.createdAt) <= today);
-          if (pastEntries.length > 0) {
-            const lastPastEntry = pastEntries[pastEntries.length - 1];
-            setCurrentIndex(data.findIndex(e => e.id === lastPastEntry.id));
-          } else {
-            setCurrentIndex(0);
-          }
+          setCurrentIndex(0);
         }
       } catch (error) {
         console.error('Error fetching entries:', error);
@@ -48,7 +38,7 @@ export default function DayView() {
     }
 
     fetchEntries();
-  }, []);
+  }, [refreshTrigger]);
 
   const handleNext = () => {
     if (currentIndex < entries.length - 1) {
