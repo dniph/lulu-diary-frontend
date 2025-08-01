@@ -16,7 +16,7 @@ export default function DayView({ refreshTrigger = 0 }) {
   useEffect(() => {
     async function fetchEntries() {
       try {
-        const res = await fetch('http://localhost:5180/api/diaries?username=LuluHot69');
+        const res = await fetch('http://localhost:5180/api/profiles/dniph/diaries');
         if (!res.ok) throw new Error('Error al obtener las entradas');
         const data = await res.json();
 
@@ -60,7 +60,7 @@ const handleDelete = async () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5180/api/diaries/${entryToDelete.id}`, {
+      const res = await fetch(`http://localhost:5180/api/profiles/dniph/diaries/${entryToDelete.id}`, {
         method: 'DELETE',
       });
 
@@ -95,7 +95,7 @@ const handleDelete = async () => {
   const saveChanges = async () => {
     const entry = entries[currentIndex];
     try {
-      const res = await fetch(`http://localhost:5180/api/diaries/${entry.id}`, {
+      const res = await fetch(`http://localhost:5180/api/profiles/dniph/diaries/${entry.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -132,6 +132,24 @@ const handleDelete = async () => {
   const formatDate = (dateString) =>
     format(parseISO(dateString), 'EEEE d MMMM yyyy', { locale: es });
 
+  const getVisibilityIcon = (visibility) => {
+    switch (visibility) {
+      case 'public': return '🌍';
+      case 'friends-only': return '👥';
+      case 'private': return '🔒';
+      default: return '🔒';
+    }
+  };
+
+  const getVisibilityText = (visibility) => {
+    switch (visibility) {
+      case 'public': return 'Público';
+      case 'friends-only': return 'Solo amigos';
+      case 'private': return 'Privado';
+      default: return 'Privado';
+    }
+  };
+
   if (loading) return <p className="text-center mt-10">Cargando entradas...</p>;
   if (entries.length === 0) return <p className="text-center mt-10">No hay entradas para mostrar.</p>;
   
@@ -144,9 +162,14 @@ const handleDelete = async () => {
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg">
-      <h2 className="text-xl font-bold text-center text-gray-700 mb-2">
-        {formatDate(entry.createdAt)}
-      </h2>
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="text-xl font-bold text-center text-gray-700 flex-1">
+          {formatDate(entry.createdAt)}
+        </h2>
+        <span className="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-600">
+          {getVisibilityIcon(entry.visibility)} {getVisibilityText(entry.visibility)}
+        </span>
+      </div>
       
       {/* Título */}
       <div className="mb-4">
