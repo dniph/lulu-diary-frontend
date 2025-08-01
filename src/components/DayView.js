@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { parseISO, format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
+import Comments from './Comments';
 
 export default function DayView({ refreshTrigger = 0, username = 'dniph' }) {
   const [entries, setEntries] = useState([]);
@@ -273,6 +274,13 @@ const handleDelete = async () => {
           Siguiente
         </button>
       </div>
+      
+      {/* Comments Section */}
+      <Comments 
+        username={username} 
+        diaryId={entry.id} 
+        currentUser="dniph" // TODO: Replace with actual authenticated user
+      />
     </div>
   );
 }

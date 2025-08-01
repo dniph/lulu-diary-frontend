@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DayView from '@/components/DayView';
 import DiaryEntry from "@/components/DiaryEntry";
 import Profile from "@/components/Profile";
@@ -8,7 +8,15 @@ import Profile from "@/components/Profile";
 export default function UserProfilePage({ params }) {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [activeTab, setActiveTab] = useState('diary');
-  const username = params.username;
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    async function getUsername() {
+      const resolvedParams = await params;
+      setUsername(resolvedParams.username);
+    }
+    getUsername();
+  }, [params]);
 
   const handleNewEntry = () => {
     // Trigger refresh in DayView when a new entry is created
@@ -18,6 +26,18 @@ export default function UserProfilePage({ params }) {
   const handleProfileUpdate = (updatedProfile) => {
     console.log('Profile updated:', updatedProfile);
   };
+
+  // Show loading state while username is being resolved
+  if (!username) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-gray-600">Cargando perfil...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
