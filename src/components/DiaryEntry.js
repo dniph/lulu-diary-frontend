@@ -47,7 +47,7 @@ function Entry({ title, content, date, visibility }) {
   );
 }
 
-export default function DiaryEntry({ onEntryCreated }) {
+export default function DiaryEntry({ onEntryCreated, username = 'dniph' }) {
   const [entries, setEntries] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -73,7 +73,7 @@ export default function DiaryEntry({ onEntryCreated }) {
     };
 
     try {
-      const res = await fetch('http://localhost:5180/api/profiles/dniph/diaries', {
+      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

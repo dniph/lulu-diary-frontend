@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { parseISO, format, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-export default function DayView({ refreshTrigger = 0 }) {
+export default function DayView({ refreshTrigger = 0, username = 'dniph' }) {
   const [entries, setEntries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ export default function DayView({ refreshTrigger = 0 }) {
   useEffect(() => {
     async function fetchEntries() {
       try {
-        const res = await fetch('http://localhost:5180/api/profiles/dniph/diaries');
+        const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries`);
         if (!res.ok) throw new Error('Error al obtener las entradas');
         const data = await res.json();
 
@@ -38,7 +38,7 @@ export default function DayView({ refreshTrigger = 0 }) {
     }
 
     fetchEntries();
-  }, [refreshTrigger]);
+  }, [refreshTrigger, username]);
 
   const handleNext = () => {
     if (currentIndex < entries.length - 1) {
@@ -60,7 +60,7 @@ const handleDelete = async () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/dniph/diaries/${entryToDelete.id}`, {
+      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${entryToDelete.id}`, {
         method: 'DELETE',
       });
 
@@ -95,7 +95,7 @@ const handleDelete = async () => {
   const saveChanges = async () => {
     const entry = entries[currentIndex];
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/dniph/diaries/${entry.id}`, {
+      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${entry.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

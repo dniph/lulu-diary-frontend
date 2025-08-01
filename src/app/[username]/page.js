@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -6,9 +5,10 @@ import DayView from '@/components/DayView';
 import DiaryEntry from "@/components/DiaryEntry";
 import Profile from "@/components/Profile";
 
-export default function ProfilePage() {
+export default function UserProfilePage({ params }) {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [activeTab, setActiveTab] = useState('diary');
+  const username = params.username;
 
   const handleNewEntry = () => {
     // Trigger refresh in DayView when a new entry is created
@@ -22,7 +22,10 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto py-8 px-4">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Mi Espacio Personal</h1>
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-2">
+          @{username}
+        </h1>
+        <p className="text-center text-gray-600 mb-8">Espacio Personal</p>
         
         {/* Tab Navigation */}
         <div className="flex justify-center mb-8">
@@ -35,7 +38,7 @@ export default function ProfilePage() {
                   : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
               }`}
             >
-              📖 Mi Diario
+              📖 Diario
             </button>
             <button
               onClick={() => setActiveTab('profile')}
@@ -45,7 +48,7 @@ export default function ProfilePage() {
                   : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
               }`}
             >
-              👤 Mi Perfil
+              👤 Perfil
             </button>
           </div>
         </div>
@@ -56,19 +59,19 @@ export default function ProfilePage() {
             <div className="space-y-8">
               {/* Diary View */}
               <div className="flex justify-center">
-                <DayView refreshTrigger={refreshTrigger} />
+                <DayView refreshTrigger={refreshTrigger} username={username} />
               </div>
               
-              {/* New Entry Form */}
+              {/* New Entry Form - TODO: Only show for authenticated user's own profile */}
               <div className="flex justify-center">
-                <DiaryEntry onEntryCreated={handleNewEntry} />
+                <DiaryEntry onEntryCreated={handleNewEntry} username={username} />
               </div>
             </div>
           )}
 
           {activeTab === 'profile' && (
             <div className="flex justify-center">
-              <Profile username="dniph" onProfileUpdate={handleProfileUpdate} />
+              <Profile username={username} onProfileUpdate={handleProfileUpdate} />
             </div>
           )}
         </div>
