@@ -191,22 +191,6 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
             </button>
           );
         })}
-
-        {/* Quick react button for most common reactions */}
-        {!userReaction && (
-          <div className="flex items-center gap-1 ml-2">
-            <span className="text-xs text-gray-400">|</span>
-            <button
-              onClick={() => handleReact('like')}
-              disabled={reacting}
-              className="flex items-center gap-1 px-2 py-1 text-gray-500 hover:text-blue-600 transition-colors disabled:opacity-50"
-              title="Reacción rápida"
-            >
-              <span className="text-sm">👍</span>
-              <span className="text-xs">Reaccionar</span>
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Reactions Detail (when there are reactions) */}
