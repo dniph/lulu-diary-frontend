@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import FollowSystem from './FollowSystem';
 
-export default function Profile({ username = 'dniph', onProfileUpdate }) {
+export default function Profile({ username = 'dniph', onProfileUpdate, currentUserId = 1 }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -80,8 +81,12 @@ export default function Profile({ username = 'dniph', onProfileUpdate }) {
   if (loading) return <p className="text-center">Cargando perfil...</p>;
   if (!profile) return <p className="text-center text-red-500">No se pudo cargar el perfil</p>;
 
+  // Check if current user is viewing their own profile
+  const isOwnProfile = currentUserId && (profile.id === currentUserId || profile.username === 'dniph'); // Assuming 'dniph' is currentUserId=1
+
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
       <div className="text-center mb-6">
         <div className="w-24 h-24 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
           {profile.name ? profile.name.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
@@ -191,6 +196,14 @@ export default function Profile({ username = 'dniph', onProfileUpdate }) {
           </button>
         </div>
       )}
+      </div>
+
+      {/* Follow System Component */}
+      <FollowSystem 
+        username={profile.username} 
+        currentUserId={currentUserId} 
+        isOwnProfile={isOwnProfile} 
+      />
     </div>
   );
 }

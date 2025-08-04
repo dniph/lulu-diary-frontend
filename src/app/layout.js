@@ -29,6 +29,9 @@ export default function RootLayout({ children }) {
           <Link href="/dniph" className="hover:underline">
             Profile
           </Link>
+          <Link href="/Varto" className="hover:underline">
+            Profile2
+          </Link>
           <Link href="/diary" className="hover:underline">
             Diary
           </Link>

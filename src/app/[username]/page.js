@@ -91,7 +91,11 @@ export default function UserProfilePage({ params }) {
 
           {activeTab === 'profile' && (
             <div className="flex justify-center">
-              <Profile username={username} onProfileUpdate={handleProfileUpdate} />
+              <Profile 
+                username={username} 
+                onProfileUpdate={handleProfileUpdate} 
+                currentUserId={1} 
+              />
             </div>
           )}
         </div>
