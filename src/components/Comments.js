@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import CommentReactions from './CommentReactions';
 
 export default function Comments({ username, diaryId, currentUser = null }) {
   const [comments, setComments] = useState([]);
@@ -226,6 +227,15 @@ export default function Comments({ username, diaryId, currentUser = null }) {
                           Editado el {formatDate(comment.updatedAt)}
                         </p>
                       )}
+                      
+                      {/* Comment Reactions */}
+                      <CommentReactions 
+                        username={username}
+                        diaryId={diaryId}
+                        commentId={comment.id}
+                        currentUser={currentUser}
+                        currentUserId={1} // TODO: Replace with actual authenticated user ID
+                      />
                     </div>
                   </div>
                 </div>
