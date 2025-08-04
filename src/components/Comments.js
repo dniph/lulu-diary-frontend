@@ -10,6 +10,14 @@ export default function Comments({ username, diaryId, currentUser = null }) {
   const [showComments, setShowComments] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
 
+  // Reset comments when diaryId changes
+  useEffect(() => {
+    setComments([]);
+    setCommentsCount(0);
+    setShowComments(false);
+    setLoading(true);
+  }, [diaryId]);
+
   // Load comments count on component mount
   useEffect(() => {
     const fetchCommentsCount = async () => {
@@ -45,10 +53,10 @@ export default function Comments({ username, diaryId, currentUser = null }) {
       }
     };
 
-    if (showComments && comments.length === 0) {
+    if (showComments) {
       fetchComments();
     }
-  }, [showComments, username, diaryId, comments.length]);
+  }, [showComments, username, diaryId]);
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
