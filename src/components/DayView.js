@@ -6,7 +6,7 @@ import { es } from 'date-fns/locale';
 import Comments from './Comments';
 import DiaryReactions from './DiaryReactions';
 
-export default function DayView({ refreshTrigger = 0, username = 'dniph' }) {
+export default function DayView({ refreshTrigger = 0, username = 'dniph', currentUserId = 1 }) {
   const [entries, setEntries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -280,15 +280,14 @@ const handleDelete = async () => {
       <DiaryReactions 
         username={username} 
         diaryId={entry.id} 
-        currentUser="dniph" // TODO: Replace with actual authenticated user
-        currentUserId={1} // TODO: Replace with actual authenticated user ID
+        currentUserId={currentUserId}
       />
       
       {/* Comments Section */}
       <Comments 
         username={username} 
         diaryId={entry.id} 
-        currentUser="dniph" // TODO: Replace with actual authenticated user
+        currentUserId={currentUserId}
       />
     </div>
   );

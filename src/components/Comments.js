@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import CommentReactions from './CommentReactions';
 
-export default function Comments({ username, diaryId, currentUser = null }) {
+export default function Comments({ username, diaryId, currentUser = null, currentUserId = 1 }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
@@ -234,7 +234,7 @@ export default function Comments({ username, diaryId, currentUser = null }) {
                         diaryId={diaryId}
                         commentId={comment.id}
                         currentUser={currentUser}
-                        currentUserId={1} // TODO: Replace with actual authenticated user ID
+                        currentUserId={currentUserId}
                       />
                     </div>
                   </div>
