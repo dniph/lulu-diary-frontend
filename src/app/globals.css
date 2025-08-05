@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Fredoka:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -24,16 +25,62 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, #fef7ff 0%, #f0f9ff 50%, #fef7ff 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  
+  font-family: 'Comfortaa', Arial, Helvetica, sans-serif;
+  min-height: 100vh;
 }
 
 .font-pixel {
   font-family: 'Press Start 2P', cursive !important;
   letter-spacing: 0.05em;
   line-height: 1.5;
+}
+
+.font-kawaii {
+  font-family: 'Fredoka', 'Comfortaa', sans-serif !important;
+  font-weight: 500;
+}
+
+/* Kawaii Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes rainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.animate-rainbow {
+  animation: rainbow 5s linear infinite;
+}
+
+/* Kawaii Border Styles */
+.border-kawaii {
+  border-image: linear-gradient(45deg, #f472b6, #a855f7, #3b82f6, #f472b6) 1;
+  border-radius: 20px;
+}
+
+/* Kawaii Shadow */
+.shadow-kawaii {
+  box-shadow: 0 10px 25px -5px rgba(244, 114, 182, 0.3), 
+              0 4px 6px -2px rgba(168, 85, 247, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 html {
