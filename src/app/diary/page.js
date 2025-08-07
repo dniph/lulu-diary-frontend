@@ -1,6 +1,7 @@
 
 
 import DiaryEntry from "@/components/DiaryEntry"; 
+import DayView from "@/components/DayView";
 
 
 export default function DiaryPage() {
@@ -14,6 +15,7 @@ export default function DiaryPage() {
           backgroundPosition: 'center'
         }}
       ></div>
+      <DayView />
       <DiaryEntry />
     </div>
   );

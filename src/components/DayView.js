@@ -180,13 +180,10 @@ const handleDelete = async () => {
   console.log("Todas las fechas:", entries.map((e) => e.createdAt));
 
   return (
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+    <div >
       <div className="relative z-10 max-w-4xl mx-auto p-4 font-pixel">
         {/* Main kawaii container */}
         <div className="bg-orange-200 rounded-lg border-4 border-pink-500 shadow-2xl relative overflow-hidden">
-          {/* Inner decorative border */}
-          <div className="absolute inset-0 border-4 border-pink-400 rounded-lg m-2"></div>
-          
           {/* Title bar - kawaii style */}
           <div className="bg-pink-500 p-4 border-b-4 border-pink-600 relative">
             <div className="text-center relative z-10">
