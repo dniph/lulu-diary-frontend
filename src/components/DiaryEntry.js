@@ -109,7 +109,7 @@ export default function DiaryEntry({ onEntryCreated, username = 'dniph' }) {
     };
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

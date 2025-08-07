@@ -18,7 +18,7 @@ export default function DayView({ refreshTrigger = 0, username = 'dniph', curren
   useEffect(() => {
     async function fetchEntries() {
       try {
-        const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries`);
+        const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries`);
         if (!res.ok) throw new Error('Error al obtener las entradas');
         const data = await res.json();
 
@@ -62,7 +62,7 @@ const handleDelete = async () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${entryToDelete.id}`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${entryToDelete.id}`, {
         method: 'DELETE',
       });
 
@@ -97,7 +97,7 @@ const handleDelete = async () => {
   const saveChanges = async () => {
     const entry = entries[currentIndex];
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${entry.id}`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${entry.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

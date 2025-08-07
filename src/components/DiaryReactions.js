@@ -30,7 +30,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
     const fetchReactions = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/reactions`);
+        const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/reactions`);
         if (!res.ok) throw new Error('Error al obtener reacciones');
         const data = await res.json();
         
@@ -59,7 +59,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
     setReacting(true);
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/react`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/react`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
     setReacting(true);
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/unreact`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/unreact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

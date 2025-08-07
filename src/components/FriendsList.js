@@ -12,7 +12,7 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
     const fetchFriends = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5180/api/profiles/${username}/friends`, {
+        const res = await fetch(`/api/lulu-diary/profiles/${username}/friends`, {
           headers: {
             'X-Current-User-Id': currentUserId.toString(),
             'Content-Type': 'application/json'

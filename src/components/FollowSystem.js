@@ -18,7 +18,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
         setLoading(true);
         
         // Fetch followers
-        const followersRes = await fetch(`http://localhost:5180/api/profiles/${username}/followers`);
+        const followersRes = await fetch(`/api/lulu-diary/profiles/${username}/followers`);
         if (followersRes.ok) {
           const followersData = await followersRes.json();
           setFollowers(followersData);
@@ -31,7 +31,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
         }
         
         // Fetch following
-        const followingRes = await fetch(`http://localhost:5180/api/profiles/${username}/following`);
+        const followingRes = await fetch(`/api/lulu-diary/profiles/${username}/following`);
         if (followingRes.ok) {
           const followingData = await followingRes.json();
           setFollowing(followingData);
@@ -52,7 +52,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
     
     setActionLoading(true);
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/follow`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/follow`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
     
     setActionLoading(true);
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/unfollow`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/unfollow`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

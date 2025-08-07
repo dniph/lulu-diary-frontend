@@ -30,7 +30,7 @@ export default function CommentReactions({ username, diaryId, commentId, current
     const fetchReactions = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/comments/${commentId}/reactions`);
+        const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments/${commentId}/reactions`);
         if (!res.ok) throw new Error('Error al obtener reacciones del comentario');
         const data = await res.json();
         
@@ -59,7 +59,7 @@ export default function CommentReactions({ username, diaryId, commentId, current
     setReacting(true);
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/comments/${commentId}/react`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments/${commentId}/react`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export default function CommentReactions({ username, diaryId, commentId, current
     setReacting(true);
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/comments/${commentId}/unreact`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments/${commentId}/unreact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const res = await fetch(`http://localhost:5180/api/profiles/${username}`);
+        const res = await fetch(`/api/lulu-diary/profiles/${username}`);
         if (!res.ok) throw new Error('Error al obtener el perfil');
         const data = await res.json();
         setProfile(data);
@@ -47,7 +47,7 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
     e.preventDefault();
     
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

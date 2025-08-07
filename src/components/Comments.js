@@ -23,7 +23,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
   useEffect(() => {
     const fetchCommentsCount = async () => {
       try {
-        const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/comments`);
+        const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`);
         if (!res.ok) throw new Error('Error al obtener comentarios');
         const data = await res.json();
         setCommentsCount(data.length);
@@ -41,7 +41,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
     const fetchComments = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/comments`);
+        const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`);
         if (!res.ok) throw new Error('Error al obtener comentarios');
         const data = await res.json();
         setComments(data);
@@ -65,7 +65,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
 
     setSubmitting(true);
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/comments`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5180/api/profiles/${username}/diaries/${diaryId}/comments/${commentId}`, {
+      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
           // TODO: Add authentication headers when auth is implemented

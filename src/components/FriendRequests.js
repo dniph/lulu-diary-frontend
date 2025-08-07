@@ -16,7 +16,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
         setLoading(true);
         
         // Fetch incoming requests
-        const incomingRes = await fetch('http://localhost:5180/api/friend-requests/incoming', {
+        const incomingRes = await fetch('/api/lulu-diary/friend-requests/incoming', {
           headers: {
             'X-Current-User-Id': currentUserId.toString(),
             'Content-Type': 'application/json'
@@ -28,7 +28,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
         }
         
         // Fetch outgoing requests
-        const outgoingRes = await fetch('http://localhost:5180/api/friend-requests/outgoing', {
+        const outgoingRes = await fetch('/api/lulu-diary/friend-requests/outgoing', {
           headers: {
             'X-Current-User-Id': currentUserId.toString(),
             'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
     
     setActionLoading(prev => ({ ...prev, [`send-${username}`]: true }));
     try {
-      const res = await fetch('http://localhost:5180/api/friend-requests/send', {
+      const res = await fetch('/api/lulu-diary/friend-requests/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
     
     setActionLoading(prev => ({ ...prev, [`accept-${requestId}`]: true }));
     try {
-      const res = await fetch(`http://localhost:5180/api/friend-requests/accept/${requestId}`, {
+      const res = await fetch(`/api/lulu-diary/friend-requests/accept/${requestId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
     
     setActionLoading(prev => ({ ...prev, [`reject-${requestId}`]: true }));
     try {
-      const res = await fetch(`http://localhost:5180/api/friend-requests/reject/${requestId}`, {
+      const res = await fetch(`/api/lulu-diary/friend-requests/reject/${requestId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
