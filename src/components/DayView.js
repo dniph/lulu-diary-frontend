@@ -153,7 +153,7 @@ const handleDelete = async () => {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" >
       <div className="relative z-10 flex items-center justify-center min-h-screen">
         <div className="bg-pink-400 rounded-lg border-4 border-pink-600 p-6 font-pixel">
           <p className="text-white font-bold">✨ LOADING ENTRIES... ✨</p>
@@ -163,7 +163,7 @@ const handleDelete = async () => {
   );
   
   if (entries.length === 0) return (
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" >
       <div className="relative z-10 flex items-center justify-center min-h-screen">
         <div className="bg-pink-400 rounded-lg border-4 border-pink-600 p-6 font-pixel">
           <p className="text-white font-bold">📖 NO ENTRIES FOUND 📖</p>

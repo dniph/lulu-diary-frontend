@@ -78,235 +78,283 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
     });
   };
 
-  if (loading) return <p className="text-center">Cargando perfil...</p>;
-  if (!profile) return <p className="text-center text-red-500">No se pudo cargar el perfil</p>;
+  if (loading) return (
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <div className="bg-pink-400 rounded-lg border-4 border-pink-600 p-6 font-pixel">
+          <p className="text-white font-bold">✨ LOADING PROFILE... ✨</p>
+        </div>
+      </div>
+    </div>
+  );
+  
+  if (!profile) return (
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <div className="bg-red-400 rounded-lg border-4 border-red-600 p-6 font-pixel">
+          <p className="text-white font-bold">❌ PROFILE NOT FOUND ❌</p>
+        </div>
+      </div>
+    </div>
+  );
 
   // Check if current user is viewing their own profile
   const isOwnProfile = currentUserId && (profile.id === currentUserId || profile.username === 'dniph'); // Assuming 'dniph' is currentUserId=1
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 p-4 font-kawaii">
-      {/* Kawaii Header Border */}
-      <div className="w-full h-8 bg-gradient-to-r from-pink-200 via-blue-200 to-pink-200 rounded-full relative overflow-hidden animate-float">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex space-x-4 text-pink-400">
-            {[...Array(8)].map((_, i) => (
-              <span key={i} className="text-xl animate-sparkle" style={{animationDelay: `${i * 0.2}s`}}>
-                {['🐾', '⭐', '💕', '✨'][i % 4]}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-2xl mx-auto p-8 bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 rounded-3xl shadow-kawaii border-4 border-pink-200 relative overflow-hidden">
-        {/* Kawaii Background Decorations */}
-        <div className="absolute top-4 left-4 text-pink-300 text-2xl animate-float">⭐</div>
-        <div className="absolute top-6 right-6 text-purple-300 text-xl animate-sparkle">💫</div>
-        <div className="absolute bottom-6 left-8 text-pink-300 text-lg animate-float" style={{animationDelay: '0.5s'}}>🌸</div>
-        <div className="absolute bottom-4 right-4 text-blue-300 text-xl animate-sparkle" style={{animationDelay: '1s'}}>✨</div>
-        
-        {/* Profile Title - Kawaii Style */}
-        <div className="text-center mb-8 relative">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent mb-2 font-kawaii animate-rainbow">
-            ✨ Profile ✨
-          </h1>
-          <div className="flex justify-center items-center gap-2 mb-6">
-            <span className="text-pink-400 animate-sparkle">🌸</span>
-            <span className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full border-2 border-pink-200 font-medium shadow-kawaii">
-              KAWAII DIARY
-            </span>
-            <span className="text-pink-400 animate-sparkle" style={{animationDelay: '0.5s'}}>🌸</span>
-          </div>
-        </div>
-
-        <div className="text-center mb-8">
-          <div className="relative inline-block mb-4">
-            <div className="w-32 h-32 bg-gradient-to-br from-pink-300 via-purple-300 to-blue-300 rounded-full mx-auto flex items-center justify-center text-white text-4xl font-bold shadow-kawaii border-4 border-white relative animate-float">
-              {profile.name ? profile.name.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
-              {/* Kawaii sparkles around avatar */}
-              <div className="absolute -top-2 -right-2 text-yellow-400 text-lg animate-sparkle">✨</div>
-              <div className="absolute -bottom-1 -left-2 text-pink-400 text-sm animate-float">💕</div>
-            </div>
-            {/* Username with kawaii styling */}
-            <div className="mt-4 bg-white rounded-full px-6 py-2 border-3 border-pink-200 shadow-kawaii inline-block">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent font-kawaii">
-                @{profile.username}
-              </h2>
+    <div className="max-w-4xl mx-auto p-4 font-pixel">
+      {/* Main kawaii container */}
+      <div className="bg-cyan-200 rounded-lg border-4 border-purple-500 shadow-2xl relative overflow-hidden">
+        {/* Title bar - kawaii style */}
+        <div className="bg-purple-500 p-4 border-b-4 border-purple-600 relative">
+          <div className="text-center relative z-10">
+            <h2 className="text-white text-xl font-bold uppercase tracking-widest mb-2">
+              � PROFILE VIEWER �
+            </h2>
+            <div className="flex justify-center items-center gap-2">
+              <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+              <span className="text-purple-100 text-xs uppercase tracking-wider">KAWAII MODE</span>
+              <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
             </div>
           </div>
+          
+          {/* Decorative corner elements */}
+          <div className="absolute top-2 left-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+          <div className="absolute top-2 right-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+          <div className="absolute bottom-2 left-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+          <div className="absolute bottom-2 right-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
         </div>
+
+        <div className="p-6">
+          {/* Profile Avatar Section - kawaii style */}
+          <div className="bg-pink-200 rounded-lg border-4 border-pink-600 shadow-lg relative overflow-hidden mb-6">
+            {/* Kawaii style border decoration */}
+            <div className="absolute inset-0 border-2 border-pink-400 rounded-lg m-1"></div>
+            
+            {/* Header with kawaii-style title bar */}
+            <div className="bg-pink-500 p-3 border-b-2 border-pink-600 relative">
+              <div className="text-center">
+                <h3 className="text-white font-bold text-sm uppercase tracking-wider">
+                  🌟 USER INFO 🌟
+                </h3>
+              </div>
+              {/* Decorative pixels */}
+              <div className="absolute top-1 left-2 w-1 h-1 bg-yellow-300"></div>
+              <div className="absolute top-1 right-2 w-1 h-1 bg-yellow-300"></div>
+            </div>
+
+            {/* Content area with kawaii texture effect */}
+            <div className="p-4 bg-cyan-300 relative">
+              {/* Kawaii style dots pattern */}
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: `radial-gradient(circle at 1px 1px, rgba(219, 39, 119, 0.3) 1px, transparent 0)`,
+                backgroundSize: '8px 8px'
+              }}></div>
+              
+              {/* Avatar and Username */}
+              <div className="text-center relative z-10">
+                <div className="inline-block mb-4">
+                  <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 via-pink-400 to-purple-400 rounded border-4 border-pink-900 mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg relative">
+                    {profile.name ? profile.name.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
+                    {/* Kawaii sparkles around avatar */}
+                    <div className="absolute -top-1 -right-1 text-yellow-300 text-sm">✨</div>
+                    <div className="absolute -bottom-1 -left-1 text-pink-300 text-xs">💕</div>
+                  </div>
+                </div>
+                
+                {/* Username with kawaii styling */}
+                <div className="bg-pink-700 text-white px-4 py-2 rounded border-2 border-pink-800 inline-block">
+                  <h2 className="text-lg font-bold uppercase tracking-wide">
+                    @{profile.username}
+                  </h2>
+                </div>
+              </div>
+              
+              {/* Corner decorations like kawaii UI */}
+              <div className="absolute top-0 left-0 w-2 h-2 bg-pink-700 border-r border-b border-pink-800"></div>
+              <div className="absolute top-0 right-0 w-2 h-2 bg-pink-700 border-l border-b border-pink-800"></div>
+              <div className="absolute bottom-0 left-0 w-2 h-2 bg-pink-700 border-r border-t border-pink-800"></div>
+              <div className="absolute bottom-0 right-0 w-2 h-2 bg-pink-700 border-l border-t border-pink-800"></div>
+            </div>
+          </div>
 
       {editing ? (
-        <div className="bg-white rounded-3xl p-6 border-4 border-pink-200 shadow-lg relative">
+        <div className="bg-orange-100 rounded-lg border-4 border-orange-500 p-6 relative overflow-hidden">
           {/* Edit Mode Header */}
-          <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-              ✏️ Edit Your Kawaii Profile ✏️
+          <div className="bg-orange-400 p-3 border-b-4 border-orange-500 mb-6 relative -mx-6 -mt-6">
+            <h3 className="text-white text-lg font-bold uppercase tracking-wider text-center">
+              ✏️ EDIT INTERFACE ✏️
             </h3>
-            <div className="flex justify-center gap-2 mt-2">
-              <span className="text-pink-400">🌟</span>
-              <span className="text-purple-400">💖</span>
-              <span className="text-blue-400">✨</span>
+            {/* Decorative elements */}
+            <div className="absolute top-1 left-2 w-2 h-2 bg-yellow-400"></div>
+            <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Input - Kawaii Style */}
+            <div className="relative">
+              <label className="block text-orange-700 text-sm font-bold mb-2 uppercase tracking-wide">
+                � NAME
+              </label>
+              <div className="bg-orange-50 border-4 border-orange-400 rounded p-1">
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full p-3 bg-white border-2 border-orange-300 rounded text-orange-800 font-pixel text-xs placeholder-orange-400 focus:border-orange-500 focus:outline-none"
+                  placeholder="Your kawaii name..."
+                />
+              </div>
             </div>
-          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="relative">
-            <label className="block text-lg font-bold text-pink-600 mb-2 flex items-center gap-2">
-              <span>🌸</span> Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full p-4 border-3 border-pink-200 rounded-2xl focus:ring-4 focus:ring-pink-300 focus:border-pink-400 bg-pink-50 text-gray-700 font-medium placeholder-pink-300 transition-all"
-              placeholder="Your kawaii name ✨"
-            />
-            <div className="absolute top-2 right-4 text-pink-300 text-xl">💕</div>
-          </div>
+            {/* Email Input - Kawaii Style */}
+            <div className="relative">
+              <label className="block text-orange-700 text-sm font-bold mb-2 uppercase tracking-wide">
+                � EMAIL
+              </label>
+              <div className="bg-orange-50 border-4 border-orange-400 rounded p-1">
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full p-3 bg-white border-2 border-orange-300 rounded text-orange-800 font-pixel text-xs placeholder-orange-400 focus:border-orange-500 focus:outline-none"
+                  placeholder="your@kawaii.email..."
+                />
+              </div>
+            </div>
 
-          <div className="relative">
-            <label className="block text-lg font-bold text-purple-600 mb-2 flex items-center gap-2">
-              <span>💌</span> Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-4 border-3 border-purple-200 rounded-2xl focus:ring-4 focus:ring-purple-300 focus:border-purple-400 bg-purple-50 text-gray-700 font-medium placeholder-purple-300 transition-all"
-              placeholder="your@kawaii.email 📧"
-            />
-            <div className="absolute top-2 right-4 text-purple-300 text-xl">✨</div>
-          </div>
+            {/* Bio Textarea - Kawaii Style */}
+            <div className="relative">
+              <label className="block text-orange-700 text-sm font-bold mb-2 uppercase tracking-wide">
+                📝 BIO
+              </label>
+              <div className="bg-orange-50 border-4 border-orange-400 rounded p-1">
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  rows="5"
+                  className="w-full p-3 bg-white border-2 border-orange-300 rounded text-orange-800 font-pixel text-xs placeholder-orange-400 resize-none focus:border-orange-500 focus:outline-none"
+                  placeholder="Tell your kawaii story..."
+                />
+              </div>
+            </div>
 
-          <div className="relative">
-            <label className="block text-lg font-bold text-blue-600 mb-2 flex items-center gap-2">
-              <span>📝</span> Biography
-            </label>
-            <textarea
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              rows="5"
-              className="w-full p-4 border-3 border-blue-200 rounded-2xl focus:ring-4 focus:ring-blue-300 focus:border-blue-400 bg-blue-50 text-gray-700 font-medium placeholder-blue-300 resize-none transition-all"
-              placeholder="Tell us about your kawaii journey! 🌟✨💖"
-            />
-            <div className="absolute top-2 right-4 text-blue-300 text-xl">🌸</div>
-          </div>
-
-          <div className="flex gap-4 pt-6">
-            <button
-              type="submit"
-              className="flex-1 bg-gradient-to-r from-pink-400 to-pink-500 text-white py-4 px-6 rounded-2xl hover:from-pink-500 hover:to-pink-600 transition-all font-bold text-lg shadow-lg transform hover:scale-105 border-2 border-pink-300"
-            >
-              💾 Save Changes ✨
-            </button>
-            <button
-              type="button"
-              onClick={cancelEdit}
-              className="flex-1 bg-gradient-to-r from-gray-400 to-gray-500 text-white py-4 px-6 rounded-2xl hover:from-gray-500 hover:to-gray-600 transition-all font-bold text-lg shadow-lg transform hover:scale-105 border-2 border-gray-300"
-            >
-              ❌ Cancel
-            </button>
-          </div>
-        </form>
+            {/* Submit Buttons - Kawaii Style */}
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                className="flex-1 bg-green-400 text-white py-4 px-6 rounded border-4 border-green-600 hover:bg-green-300 transition-all font-bold text-sm uppercase tracking-wider shadow-lg transform hover:scale-105 relative overflow-hidden"
+              >
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <span>💾</span> SAVE <span>✨</span>
+                </div>
+                {/* Button corners */}
+                <div className="absolute top-0 left-0 w-2 h-2 bg-green-200"></div>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-green-200"></div>
+                <div className="absolute bottom-0 left-0 w-2 h-2 bg-green-200"></div>
+                <div className="absolute bottom-0 right-0 w-2 h-2 bg-green-200"></div>
+              </button>
+              <button
+                type="button"
+                onClick={cancelEdit}
+                className="flex-1 bg-gray-400 text-white py-4 px-6 rounded border-4 border-gray-600 hover:bg-gray-300 transition-all font-bold text-sm uppercase tracking-wider shadow-lg transform hover:scale-105 relative overflow-hidden"
+              >
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <span>❌</span> CANCEL <span>📖</span>
+                </div>
+                {/* Button corners */}
+                <div className="absolute top-0 left-0 w-2 h-2 bg-gray-200"></div>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-gray-200"></div>
+                <div className="absolute bottom-0 left-0 w-2 h-2 bg-gray-200"></div>
+                <div className="absolute bottom-0 right-0 w-2 h-2 bg-gray-200"></div>
+              </button>
+            </div>
+          </form>
         </div>
       ) : (
-        <div className="space-y-8">
-          {/* Info Card - Kawaii Style */}
-          <div className="bg-white rounded-3xl p-6 border-4 border-pink-200 shadow-xl relative overflow-hidden">
-            {/* Kawaii decorations */}
-            <div className="absolute top-2 left-2 text-pink-300 text-lg animate-pulse">🌸</div>
-            <div className="absolute top-2 right-2 text-purple-300 text-lg animate-bounce">✨</div>
-            
-            {/* Header */}
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent flex items-center justify-center gap-2">
-                <span>💕</span> Personal Info <span>💕</span>
+        <div className="space-y-6">
+          {/* Profile Info - Kawaii Style */}
+          <div className="bg-green-200 rounded-lg border-4 border-green-500 p-4 relative overflow-hidden">
+            <div className="bg-green-400 p-2 border-b-4 border-green-500 mb-4 relative -mx-4 -mt-4">
+              <h3 className="text-white text-sm font-bold uppercase tracking-wider text-center">
+                💕 PERSONAL INFO 💕
               </h3>
-              <div className="flex justify-center gap-1 mt-2">
-                <span className="w-2 h-2 bg-pink-400 rounded-full animate-pulse"></span>
-                <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></span>
-                <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></span>
-              </div>
+              <div className="absolute top-1 left-2 w-2 h-2 bg-yellow-400"></div>
+              <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
             </div>
             
-            <div className="space-y-6">
-              <div className="bg-gradient-to-r from-pink-50 to-pink-100 p-4 rounded-2xl border-2 border-pink-200 relative">
-                <div className="absolute top-2 right-2 text-pink-400">🌸</div>
-                <span className="text-lg font-bold text-pink-600 flex items-center gap-2 mb-2">
-                  <span>👤</span> Name:
+            <div className="space-y-4 text-xs">
+              {/* Name */}
+              <div className="bg-cyan-100 p-3 rounded border-2 border-green-600 relative">
+                <div className="absolute top-1 right-1 text-green-500">🌸</div>
+                <span className="font-bold text-green-700 uppercase tracking-wide block mb-1">
+                  👤 NAME:
                 </span>
-                <p className="text-gray-800 font-medium text-lg pl-6">{profile.name || '✨ Not specified yet ✨'}</p>
-              </div>
-              
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-2xl border-2 border-purple-200 relative">
-                <div className="absolute top-2 right-2 text-purple-400">💌</div>
-                <span className="text-lg font-bold text-purple-600 flex items-center gap-2 mb-2">
-                  <span>📧</span> Email:
-                </span>
-                <p className="text-gray-800 font-medium text-lg pl-6">{profile.email || '✨ Not specified yet ✨'}</p>
-              </div>
-              
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-2xl border-2 border-blue-200 relative">
-                <div className="absolute top-2 right-2 text-blue-400">📝</div>
-                <span className="text-lg font-bold text-blue-600 flex items-center gap-2 mb-2">
-                  <span>💭</span> Biography:
-                </span>
-                <p className="text-gray-800 font-medium text-lg pl-6 leading-relaxed">
-                  {profile.bio || '✨ No kawaii story yet... Write something cute! ✨'}
+                <p className="text-green-800 font-pixel pl-4">
+                  {profile.name || '✨ NOT SPECIFIED YET ✨'}
                 </p>
               </div>
               
-              <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-2xl border-2 border-green-200 relative">
-                <div className="absolute top-2 right-2 text-green-400">🗓️</div>
-                <span className="text-lg font-bold text-green-600 flex items-center gap-2 mb-2">
-                  <span>🌟</span> Member since:
+              {/* Email */}
+              <div className="bg-cyan-100 p-3 rounded border-2 border-green-600 relative">
+                <div className="absolute top-1 right-1 text-green-500">�</div>
+                <span className="font-bold text-green-700 uppercase tracking-wide block mb-1">
+                  � EMAIL:
                 </span>
-                <p className="text-gray-800 font-medium text-lg pl-6">
+                <p className="text-green-800 font-pixel pl-4">
+                  {profile.email || '✨ NOT SPECIFIED YET ✨'}
+                </p>
+              </div>
+              
+              {/* Bio */}
+              <div className="bg-cyan-100 p-3 rounded border-2 border-green-600 relative">
+                <div className="absolute top-1 right-1 text-green-500">📝</div>
+                <span className="font-bold text-green-700 uppercase tracking-wide block mb-1">
+                  💭 BIO:
+                </span>
+                <p className="text-green-800 font-pixel pl-4 leading-relaxed">
+                  {profile.bio || '✨ NO KAWAII STORY YET... WRITE SOMETHING CUTE! ✨'}
+                </p>
+              </div>
+              
+              {/* Created At */}
+              <div className="bg-cyan-100 p-3 rounded border-2 border-green-600 relative">
+                <div className="absolute top-1 right-1 text-green-500">🗓️</div>
+                <span className="font-bold text-green-700 uppercase tracking-wide block mb-1">
+                  🌟 MEMBER SINCE:
+                </span>
+                <p className="text-green-800 font-pixel pl-4">
                   {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('es-ES', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
-                  }) : '✨ Date not available ✨'}
+                  }) : '✨ DATE NOT AVAILABLE ✨'}
                 </p>
               </div>
             </div>
           </div>
 
           {/* Edit Button - Kawaii Style */}
-          <button
-            onClick={() => setEditing(true)}
-            className="w-full bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 text-white py-4 px-8 rounded-3xl hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 transition-all font-bold text-xl shadow-xl transform hover:scale-105 border-2 border-white relative overflow-hidden"
-          >
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              <span>✏️</span> Edit Kawaii Profile <span>✨</span>
-            </span>
-            {/* Animated background sparkles */}
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-2 left-4 text-white text-xl animate-pulse">⭐</div>
-              <div className="absolute bottom-2 right-4 text-white text-xl animate-bounce">💫</div>
-              <div className="absolute top-1/2 left-1/4 text-white text-sm animate-pulse" style={{animationDelay: '0.5s'}}>✨</div>
-              <div className="absolute top-1/4 right-1/4 text-white text-sm animate-bounce" style={{animationDelay: '1s'}}>🌸</div>
-            </div>
-          </button>
+          {isOwnProfile && (
+            <button
+              onClick={() => setEditing(true)}
+              className="w-full bg-blue-400 text-white py-4 px-6 rounded border-4 border-blue-600 hover:bg-blue-300 transition-all font-bold text-sm uppercase tracking-wider shadow-lg transform hover:scale-105 relative overflow-hidden"
+            >
+              <div className="relative z-10 flex items-center justify-center gap-2">
+                <span>✏️</span> EDIT KAWAII PROFILE <span>✨</span>
+              </div>
+              {/* Button corners */}
+              <div className="absolute top-0 left-0 w-2 h-2 bg-blue-200"></div>
+              <div className="absolute top-0 right-0 w-2 h-2 bg-blue-200"></div>
+              <div className="absolute bottom-0 left-0 w-2 h-2 bg-blue-200"></div>
+              <div className="absolute bottom-0 right-0 w-2 h-2 bg-blue-200"></div>
+            </button>
+          )}
         </div>
       )}
-      </div>
-
-      {/* Kawaii Bottom Border */}
-      <div className="w-full h-6 bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 rounded-full relative overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex space-x-6 text-pink-400 opacity-60">
-            {[...Array(6)].map((_, i) => (
-              <span key={i} className="text-lg animate-pulse" style={{animationDelay: `${i * 0.3}s`}}>
-                {['💕', '🌸', '⭐', '✨', '💫', '🌟'][i]}
-              </span>
-            ))}
-          </div>
         </div>
       </div>
 
