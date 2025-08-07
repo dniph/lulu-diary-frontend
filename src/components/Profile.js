@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import FollowSystem from './FollowSystem';
 
 export default function Profile({ username = 'dniph', onProfileUpdate, currentUserId = 1 }) {
@@ -154,8 +155,20 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
               {/* Avatar and Username */}
               <div className="text-center relative z-10">
                 <div className="inline-block mb-4">
-                  <div className="w-24 h-24 bg-gradient-to-br from-yellow-400 via-pink-400 to-purple-400 rounded border-4 border-pink-900 mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg relative">
-                    {profile.name ? profile.name.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
+                  <div className="w-24 h-24 rounded border-4 border-pink-900 mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg relative overflow-hidden">
+                    {profile.username === 'dniph' ? (
+                      <Image 
+                        src="/images/profile-picture.jpg" 
+                        alt="Profile Picture" 
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-yellow-400 via-pink-400 to-purple-400 flex items-center justify-center">
+                        {profile.name ? profile.name.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
+                      </div>
+                    )}
                     {/* Kawaii sparkles around avatar */}
                     <div className="absolute -top-1 -right-1 text-yellow-300 text-sm">✨</div>
                     <div className="absolute -bottom-1 -left-1 text-pink-300 text-xs">💕</div>
