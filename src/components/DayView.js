@@ -152,8 +152,25 @@ const handleDelete = async () => {
     }
   };
 
-  if (loading) return <p className="text-center mt-10">Cargando entradas...</p>;
-  if (entries.length === 0) return <p className="text-center mt-10">No hay entradas para mostrar.</p>;
+  if (loading) return (
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <div className="bg-pink-400 rounded-lg border-4 border-pink-600 p-6 font-pixel">
+          <p className="text-white font-bold">✨ LOADING ENTRIES... ✨</p>
+        </div>
+      </div>
+    </div>
+  );
+  
+  if (entries.length === 0) return (
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+      <div className="relative z-10 flex items-center justify-center min-h-screen">
+        <div className="bg-pink-400 rounded-lg border-4 border-pink-600 p-6 font-pixel">
+          <p className="text-white font-bold">📖 NO ENTRIES FOUND 📖</p>
+        </div>
+      </div>
+    </div>
+  );
   
   const entry = entries[currentIndex];
   const isLastEntry = currentIndex === entries.length - 1;
@@ -163,132 +180,224 @@ const handleDelete = async () => {
   console.log("Todas las fechas:", entries.map((e) => e.createdAt));
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-lg">
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="text-xl font-bold text-center text-gray-700 flex-1">
-          {formatDate(entry.createdAt)}
-        </h2>
-        <span className="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-600">
-          {getVisibilityIcon(entry.visibility)} {getVisibilityText(entry.visibility)}
-        </span>
-      </div>
-      
-      {/* Título */}
-      <div className="mb-4">
-        {editingTitle ? (
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={editTitle}
-              onChange={(e) => setEditTitle(e.target.value)}
-              className="flex-1 text-2xl font-bold border-2 border-blue-300 rounded px-2 py-1"
-              autoFocus
-            />
-            <button
-              onClick={saveChanges}
-              className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"
-            >
-              ✓
-            </button>
-            <button
-              onClick={cancelEdit}
-              className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded text-sm"
-            >
-              ✕
-            </button>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: "url('/images/ATARDECER.jpg')"}}>
+      <div className="relative z-10 max-w-4xl mx-auto p-4 font-pixel">
+        {/* Main kawaii container */}
+        <div className="bg-orange-200 rounded-lg border-4 border-pink-500 shadow-2xl relative overflow-hidden">
+          {/* Inner decorative border */}
+          <div className="absolute inset-0 border-4 border-pink-400 rounded-lg m-2"></div>
+          
+          {/* Title bar - kawaii style */}
+          <div className="bg-pink-500 p-4 border-b-4 border-pink-600 relative">
+            <div className="text-center relative z-10">
+              <h2 className="text-white text-xl font-bold uppercase tracking-widest mb-2">
+                📅 DIARY VIEWER 📅
+              </h2>
+              <div className="flex justify-center items-center gap-2">
+                <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                <span className="text-pink-100 text-xs uppercase tracking-wider">READING MODE</span>
+                <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            
+            {/* Decorative corner elements */}
+            <div className="absolute top-2 left-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+            <div className="absolute top-2 right-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+            <div className="absolute bottom-2 left-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+            <div className="absolute bottom-2 right-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
           </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold flex-1">{entry.title}</h1>
-            <button
-              onClick={handleEditTitle}
-              className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm"
-            >
-              ✏️
-            </button>
-          </div>
-        )}
-      </div>
 
-      {/* Contenido */}
-      <div className="mb-4">
-        {editingContent ? (
-          <div className="flex flex-col gap-2">
-            <textarea
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-              className="text-gray-700 border-2 border-blue-300 rounded px-2 py-1 min-h-[100px] resize-y"
-              autoFocus
-            />
-            <div className="flex gap-2">
+          <div className="p-6">
+            {/* Entry container - kawaii style */}
+            <div className="bg-pink-200 rounded-lg border-4 border-pink-600 shadow-lg relative overflow-hidden">
+              {/* Kawaii style border decoration */}
+              <div className="absolute inset-0 border-2 border-pink-400 rounded-lg m-1"></div>
+              
+              {/* Header with date and visibility */}
+              <div className="bg-pink-500 p-3 border-b-2 border-pink-600 relative">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-white font-bold text-sm flex-1 uppercase tracking-wider">
+                    📜 {formatDate(entry.createdAt)}
+                  </h2>
+                  <div className="bg-pink-800 px-2 py-1 rounded border border-pink-900 text-white text-xs">
+                    {getVisibilityIcon(entry.visibility)} {getVisibilityText(entry.visibility)}
+                  </div>
+                </div>
+                {/* Decorative pixels */}
+                <div className="absolute top-1 left-2 w-1 h-1 bg-yellow-300"></div>
+                <div className="absolute top-1 right-2 w-1 h-1 bg-yellow-300"></div>
+              </div>
+
+              {/* Content area with kawaii texture effect */}
+              <div className="p-4 bg-cyan-300 relative">
+                {/* Kawaii style dots pattern */}
+                <div className="absolute inset-0 opacity-10" style={{
+                  backgroundImage: `radial-gradient(circle at 1px 1px, rgba(219, 39, 119, 0.3) 1px, transparent 0)`,
+                  backgroundSize: '8px 8px'
+                }}></div>
+                
+                {/* Title Section */}
+                <div className="mb-4 relative z-10">
+                  {editingTitle ? (
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="flex-1 text-lg font-bold border-2 border-pink-500 rounded px-2 py-1 bg-white text-pink-900 font-pixel"
+                        autoFocus
+                      />
+                      <button
+                        onClick={saveChanges}
+                        className="px-3 py-1 bg-green-400 hover:bg-green-500 text-white rounded text-xs font-bold border-2 border-green-600"
+                      >
+                        ✓
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded text-xs font-bold border-2 border-gray-600"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <h1 className="text-lg font-bold flex-1 text-pink-900 uppercase tracking-wide">🌟 {entry.title}</h1>
+                      <button
+                        onClick={handleEditTitle}
+                        className="px-2 py-1 bg-cyan-400 hover:bg-cyan-500 text-white rounded text-xs font-bold border-2 border-cyan-600"
+                      >
+                        ✏️
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content Section */}
+                <div className="mb-4 relative z-10">
+                  {editingContent ? (
+                    <div className="flex flex-col gap-2">
+                      <textarea
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        className="text-pink-900 border-2 border-pink-500 rounded px-2 py-1 min-h-[100px] resize-y bg-white font-pixel text-xs"
+                        autoFocus
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={saveChanges}
+                          className="px-3 py-1 bg-green-400 hover:bg-green-500 text-white rounded text-xs font-bold border-2 border-green-600"
+                        >
+                          💾 SAVE
+                        </button>
+                        <button
+                          onClick={cancelEdit}
+                          className="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white rounded text-xs font-bold border-2 border-gray-600"
+                        >
+                          ❌ CANCEL
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <p className="text-pink-900 flex-1 text-xs leading-relaxed">{entry.content}</p>
+                      <button
+                        onClick={handleEditContent}
+                        className="px-2 py-1 bg-cyan-400 hover:bg-cyan-500 text-white rounded text-xs font-bold self-start border-2 border-cyan-600"
+                      >
+                        ✏️
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Timestamp */}
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-pink-500 relative z-10">
+                  <div className="bg-pink-700 text-white px-2 py-1 rounded text-xs border border-pink-800">
+                    {entry.updatedAt && entry.updatedAt !== entry.createdAt
+                      ? `📝 EDITED: ${formatDate(entry.updatedAt)}`
+                      : `📅 WRITTEN: ${formatDate(entry.createdAt)}`}
+                  </div>
+                  <div className="text-pink-700 text-xs">★ Entry #{currentIndex + 1}</div>
+                </div>
+              </div>
+              
+              {/* Corner decorations like kawaii UI */}
+              <div className="absolute top-0 left-0 w-2 h-2 bg-pink-700 border-r border-b border-pink-800"></div>
+              <div className="absolute top-0 right-0 w-2 h-2 bg-pink-700 border-l border-b border-pink-800"></div>
+              <div className="absolute bottom-0 left-0 w-2 h-2 bg-pink-700 border-r border-t border-pink-800"></div>
+              <div className="absolute bottom-0 right-0 w-2 h-2 bg-pink-700 border-l border-t border-pink-800"></div>
+            </div>
+
+            {/* Navigation Controls - kawaii style */}
+            <div className="flex justify-between mt-6 gap-2">
               <button
-                onClick={saveChanges}
-                className="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"
+                onClick={handlePrev}
+                disabled={currentIndex === 0 || editingTitle || editingContent}
+                className="px-4 py-3 bg-purple-400 hover:bg-purple-500 text-white rounded border-4 border-purple-600 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xs uppercase tracking-wider transition-all transform hover:scale-105"
               >
-                Guardar
+                ⬅️ PREV
               </button>
               <button
-                onClick={cancelEdit}
-                className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded text-sm"
+                onClick={handleDelete}
+                disabled={editingTitle || editingContent}
+                className="flex-1 mx-2 px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded border-4 border-red-600 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xs uppercase tracking-wider transition-all transform hover:scale-105"
               >
-                Cancelar
+                🗑️ DELETE
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === entries.length - 1 || editingTitle || editingContent}
+                className="px-4 py-3 bg-blue-400 hover:bg-blue-500 text-white rounded border-4 border-blue-600 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xs uppercase tracking-wider transition-all transform hover:scale-105"
+              >
+                NEXT ➡️
               </button>
             </div>
+            
+            {/* Counter */}
+            <div className="text-center mt-4">
+              <div className="bg-yellow-400 text-pink-900 px-4 py-2 rounded border-4 border-yellow-600 font-bold text-xs inline-block">
+                📚 {currentIndex + 1} of {entries.length} ENTRIES
+              </div>
+            </div>
           </div>
-        ) : (
-          <div className="flex gap-2">
-            <p className="text-gray-700 flex-1">{entry.content}</p>
-            <button
-              onClick={handleEditContent}
-              className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm self-start"
-            >
-              ✏️
-            </button>
+        </div>
+
+        {/* Reactions and Comments Sections - kawaii containers */}
+        <div className="mt-6 space-y-4">
+          {/* Reactions Section */}
+          <div className="bg-purple-200 rounded-lg border-4 border-purple-500 p-4 relative overflow-hidden">
+            <div className="bg-purple-400 p-2 border-b-4 border-purple-500 mb-4 relative -mx-4 -mt-4">
+              <h3 className="text-white text-sm font-bold uppercase tracking-wider text-center">
+                💖 REACTIONS 💖
+              </h3>
+              <div className="absolute top-1 left-2 w-2 h-2 bg-yellow-400"></div>
+              <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
+            </div>
+            <DiaryReactions 
+              username={username} 
+              diaryId={entry.id} 
+              currentUserId={currentUserId}
+            />
           </div>
-        )}
+
+          {/* Comments Section */}
+          <div className="bg-green-200 rounded-lg border-4 border-green-500 p-4 relative overflow-hidden">
+            <div className="bg-green-400 p-2 border-b-4 border-green-500 mb-4 relative -mx-4 -mt-4">
+              <h3 className="text-white text-sm font-bold uppercase tracking-wider text-center">
+                💬 COMMENTS 💬
+              </h3>
+              <div className="absolute top-1 left-2 w-2 h-2 bg-yellow-400"></div>
+              <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
+            </div>
+            <Comments 
+              username={username} 
+              diaryId={entry.id} 
+              currentUserId={currentUserId}
+            />
+          </div>
+        </div>
       </div>
-      <p className="text-sm text-gray-500 text-right italic">
-        {entry.updatedAt && entry.updatedAt !== entry.createdAt
-          ? `Editado el ${formatDate(entry.updatedAt)}`
-          : `Escrito el ${formatDate(entry.createdAt)}`}
-      </p>
-      <div className="flex justify-between mt-6">
-        <button
-          onClick={handlePrev}
-          disabled={currentIndex === 0 || editingTitle || editingContent}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
-        >
-          Anterior
-        </button>
-        <button
-          onClick={handleDelete}
-          disabled={editingTitle || editingContent}
-          className="flex-1 mx-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded disabled:opacity-50"
-        >
-          Eliminar
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={currentIndex === entries.length - 1 || editingTitle || editingContent}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50"
-        >
-          Siguiente
-        </button>
-      </div>
-      
-      {/* Reactions Section */}
-      <DiaryReactions 
-        username={username} 
-        diaryId={entry.id} 
-        currentUserId={currentUserId}
-      />
-      
-      {/* Comments Section */}
-      <Comments 
-        username={username} 
-        diaryId={entry.id} 
-        currentUserId={currentUserId}
-      />
     </div>
   );
 }
