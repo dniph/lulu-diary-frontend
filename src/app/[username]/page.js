@@ -65,7 +65,15 @@ export default function UserProfilePage({ params }) {
   const currentUserId = getCurrentUserId(currentUser);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen relative overflow-hidden font-kawaii">
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/images/ChatGPT.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      ></div>
       <div className="max-w-6xl mx-auto py-8 px-4">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-4xl font-bold text-gray-800">
