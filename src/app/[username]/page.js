@@ -90,6 +90,8 @@ export default function UserProfilePage({ params }) {
               >
                 <option value="dniph">@dniph</option>
                 <option value="Varto">@Varto</option>
+                <option value="Lulu">@Lulu</option>
+                <option value="VibrantMerryShark87567">@VibrantMerryShark87567</option>
               </select>
             </div>
           </div>

@@ -2,6 +2,7 @@ import './globals.css';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import SignOut from '../components/SignOut';
+import ProfileLink from '../components/ProfileLink';
 
 export default async function RootLayout({ children }) {
   const cookieStore = await cookies();
@@ -18,8 +19,7 @@ export default async function RootLayout({ children }) {
       <body>
         <nav className="bg-indigo-600 text-white p-4 flex space-x-4 font-pixel">
           <Link href="/" className="hover:underline">Home</Link>
-          <Link href="/dniph" className="hover:underline">Profile1</Link>
-          <Link href="/Varto" className="hover:underline">Profile2</Link>
+          <ProfileLink />
           <Link href="/diary" className="hover:underline">Diary</Link>
           {isLoggedIn ? (
             <>

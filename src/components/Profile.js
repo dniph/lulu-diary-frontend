@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import FollowSystem from './FollowSystem';
 
-export default function Profile({ username = 'dniph', onProfileUpdate, currentUserId = 1 }) {
+export default function Profile({ username = null, onProfileUpdate, currentUserId = null, useMe = false }) {
   const [profile, setProfile] = useState(null);
+  const [currentUserProfile, setCurrentUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,8 +15,40 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
     bio: '',
   });
 
+  // Fetch current user profile using Me API
   useEffect(() => {
-    async function fetchProfile() {
+    async function fetchCurrentUser() {
+      try {
+        const res = await fetch(`/api/lulu-diary/me`);
+        if (res.ok) {
+          const currentUser = await res.json();
+          setCurrentUserProfile(currentUser);
+          
+          // If we're using Me API or viewing own profile, use this data
+          if (useMe || !username || username === currentUser.username) {
+            setProfile(currentUser);
+            setFormData({
+              name: currentUser.name || '',
+              email: currentUser.email || '',
+              bio: currentUser.bio || '',
+            });
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+      
+      // If not using Me API and viewing different user, fetch specific profile
+      if (username && !useMe) {
+        await fetchSpecificProfile();
+      } else {
+        setLoading(false);
+      }
+    }
+
+    async function fetchSpecificProfile() {
       try {
         const res = await fetch(`/api/lulu-diary/profiles/${username}`);
         if (!res.ok) throw new Error('Error al obtener el perfil');
@@ -33,8 +66,8 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
       }
     }
 
-    fetchProfile();
-  }, [username]);
+    fetchCurrentUser();
+  }, [username, useMe]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -47,18 +80,44 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
     e.preventDefault();
     
     try {
-      const res = await fetch(`/api/lulu-diary/profiles/${username}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      let res;
+      const isOwnProfile = currentUserProfile && (
+        useMe || 
+        !username || 
+        username === currentUserProfile.username ||
+        profile?.id === currentUserProfile.id
+      );
+
+      if (isOwnProfile) {
+        // Use Me API for current user's profile
+        res = await fetch(`/api/lulu-diary/me`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+      } else {
+        // Use specific profile endpoint for other users
+        res = await fetch(`/api/lulu-diary/profiles/${username}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+      }
 
       if (!res.ok) throw new Error('Error al actualizar el perfil');
 
       const updatedProfile = await res.json();
       setProfile(updatedProfile);
+      
+      // Update current user profile if this was their own profile
+      if (isOwnProfile) {
+        setCurrentUserProfile(updatedProfile);
+      }
+      
       setEditing(false);
       
       if (onProfileUpdate) {
@@ -99,8 +158,13 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
     </div>
   );
 
-  // Check if current user is viewing their own profile
-  const isOwnProfile = currentUserId && (profile.id === currentUserId || profile.username === 'dniph'); // Assuming 'dniph' is currentUserId=1
+  // Check if current user is viewing their own profile (no more hardcoded values)
+  const isOwnProfile = currentUserProfile && (
+    useMe || 
+    !username || 
+    username === currentUserProfile.username ||
+    profile?.id === currentUserProfile.id
+  );
 
   return (
     <div className="max-w-4xl mx-auto p-4 font-pixel">
@@ -156,7 +220,15 @@ export default function Profile({ username = 'dniph', onProfileUpdate, currentUs
               <div className="text-center relative z-10">
                 <div className="inline-block mb-4">
                   <div className="w-24 h-24 rounded border-4 border-pink-900 mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg relative overflow-hidden">
-                    {profile.username === 'dniph' ? (
+                    {profile.username === currentUserProfile?.username && profile.profilePicture ? (
+                      <Image 
+                        src={profile.profilePicture} 
+                        alt="Profile Picture" 
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : profile.username === 'dniph' ? (
                       <Image 
                         src="/images/profile-picture.jpg" 
                         alt="Profile Picture" 
