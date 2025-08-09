@@ -10,7 +10,7 @@ export default function UserProfilePage({ params }) {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [activeTab, setActiveTab] = useState('diary');
   const [username, setUsername] = useState('');
-  const [currentUser, setCurrentUser] = useState('dniph'); // Simulate current logged user
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     async function getUsername() {
@@ -20,13 +20,24 @@ export default function UserProfilePage({ params }) {
     getUsername();
   }, [params]);
 
-  // Simulate getting current user from auth context (in real app this would come from authentication)
+  // Get current authenticated user
   useEffect(() => {
-    // For demo purposes, let's allow switching between users
-    // In real app, this would come from your authentication system
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentUserParam = urlParams.get('as') || 'dniph';
-    setCurrentUser(currentUserParam);
+    async function fetchCurrentUser() {
+      try {
+        const response = await fetch('/api/lulu-diary/me', {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    }
+
+    fetchCurrentUser();
   }, []);
 
   const handleNewEntry = () => {
@@ -51,18 +62,7 @@ export default function UserProfilePage({ params }) {
   }
 
   // Check if current user is viewing their own profile
-  const isOwnProfile = username === currentUser;
-  
-  // Get currentUserId based on username (for demo purposes)
-  const getCurrentUserId = (user) => {
-    switch(user) {
-      case 'dniph': return 1;
-      case 'Varto': return 2;
-      default: return 1;
-    }
-  };
-  
-  const currentUserId = getCurrentUserId(currentUser);
+  const isOwnProfile = currentUser && username === currentUser.username;
 
   return (
     <div className="min-h-screen relative overflow-hidden font-kawaii">
@@ -79,21 +79,6 @@ export default function UserProfilePage({ params }) {
             <h1 className="text-4xl font-bold text-gray-800">
               @{username}
             </h1>
-            
-            {/* User switcher for demo purposes */}
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-gray-600">Viendo como:</span>
-              <select 
-                value={currentUser} 
-                onChange={(e) => setCurrentUser(e.target.value)}
-                className="px-3 py-1 border border-gray-300 rounded-lg text-sm"
-              >
-                <option value="dniph">@dniph</option>
-                <option value="Varto">@Varto</option>
-                <option value="Lulu">@Lulu</option>
-                <option value="VibrantMerryShark87567">@VibrantMerryShark87567</option>
-              </select>
-            </div>
           </div>
           <p className="text-center text-gray-600 mb-8">
             {isOwnProfile ? 'Tu Espacio Personal' : `Perfil de @${username}`}
@@ -141,13 +126,13 @@ export default function UserProfilePage({ params }) {
               <div className="space-y-8">
                 {/* Diary View */}
                 <div className="flex justify-center">
-                  <DayView refreshTrigger={refreshTrigger} username={username} currentUserId={currentUserId} />
+                  <DayView refreshTrigger={refreshTrigger} />
                 </div>
                 
                 {/* New Entry Form - Only show for authenticated user's own profile */}
                 {isOwnProfile && (
                   <div className="flex justify-center">
-                    <DiaryEntry onEntryCreated={handleNewEntry} username={username} />
+                    <DiaryEntry onEntryCreated={handleNewEntry} />
                   </div>
                 )}
               </div>
@@ -157,8 +142,7 @@ export default function UserProfilePage({ params }) {
               <div className="flex justify-center">
                 <Profile 
                   username={username} 
-                  onProfileUpdate={handleProfileUpdate} 
-                  currentUserId={currentUserId} 
+                  onProfileUpdate={handleProfileUpdate}
                 />
               </div>
             )}
@@ -167,7 +151,7 @@ export default function UserProfilePage({ params }) {
               <div className="flex justify-center">
                 <FriendsSystem 
                   username={username} 
-                  currentUserId={currentUserId} 
+                  currentUserId={currentUser?.id} 
                   isOwnProfile={isOwnProfile} 
                 />
               </div>

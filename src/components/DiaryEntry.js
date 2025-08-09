@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { authenticatedFetch } from '@/lib/auth-utils';
 
 function Entry({ title, content, date, visibility }) {
   const formatDate = (dateString) => {
@@ -83,14 +84,37 @@ function Entry({ title, content, date, visibility }) {
   );
 }
 
-export default function DiaryEntry({ onEntryCreated, username = 'dniph' }) {
+export default function DiaryEntry({ onEntryCreated }) {
   const [entries, setEntries] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     visibility: 'private', // Default to private
   });
+
+  useEffect(() => {
+    async function fetchCurrentUser() {
+      try {
+        const response = await fetch('/api/lulu-diary/me', {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCurrentUser();
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -102,6 +126,11 @@ export default function DiaryEntry({ onEntryCreated, username = 'dniph' }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!currentUser) {
+      console.error('User not authenticated');
+      return;
+    }
+
     const newEntry = {
       title: formData.title,
       content: formData.content,
@@ -109,7 +138,7 @@ export default function DiaryEntry({ onEntryCreated, username = 'dniph' }) {
     };
 
     try {
-      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries`, {
+      const res = await authenticatedFetch(`/api/lulu-diary/profiles/${currentUser.username}/diaries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -134,6 +163,34 @@ export default function DiaryEntry({ onEntryCreated, username = 'dniph' }) {
       console.error('Error en la petición:', error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto p-4 font-pixel">
+        <div className="bg-yellow-100 rounded-lg border-4 border-orange-500 shadow-2xl relative overflow-hidden">
+          <div className="p-6 text-center">
+            <div className="bg-orange-400 rounded-lg border-4 border-orange-600 p-6">
+              <p className="text-white font-bold">✨ LOADING USER... ✨</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="max-w-4xl mx-auto p-4 font-pixel">
+        <div className="bg-yellow-100 rounded-lg border-4 border-orange-500 shadow-2xl relative overflow-hidden">
+          <div className="p-6 text-center">
+            <div className="bg-red-400 rounded-lg border-4 border-red-600 p-6">
+              <p className="text-white font-bold">🔒 PLEASE LOGIN TO CREATE ENTRIES 🔒</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4 font-pixel">

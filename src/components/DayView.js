@@ -6,7 +6,7 @@ import { es } from 'date-fns/locale';
 import Comments from './Comments';
 import DiaryReactions from './DiaryReactions';
 
-export default function DayView({ refreshTrigger = 0, username = 'dniph', currentUserId = 1 }) {
+export default function DayView({ refreshTrigger = 0 }) {
   const [entries, setEntries] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -14,11 +14,33 @@ export default function DayView({ refreshTrigger = 0, username = 'dniph', curren
   const [editingContent, setEditingContent] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    async function fetchCurrentUser() {
+      try {
+        const response = await fetch('/api/lulu-diary/me', {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    }
+
+    fetchCurrentUser();
+  }, []);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    
     async function fetchEntries() {
       try {
-        const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries`);
+        const res = await fetch(`/api/lulu-diary/profiles/${currentUser.username}/diaries`);
         if (!res.ok) throw new Error('Error al obtener las entradas');
         const data = await res.json();
 
@@ -40,7 +62,7 @@ export default function DayView({ refreshTrigger = 0, username = 'dniph', curren
     }
 
     fetchEntries();
-  }, [refreshTrigger, username]);
+  }, [refreshTrigger, currentUser]);
 
   const handleNext = () => {
     if (currentIndex < entries.length - 1) {
@@ -55,6 +77,9 @@ export default function DayView({ refreshTrigger = 0, username = 'dniph', curren
   };
 
 const handleDelete = async () => {
+    // Solo permitir eliminación si es el propio perfil del usuario
+    if (!currentUser) return;
+    
     const entryToDelete = entries[currentIndex];
     if (!entryToDelete) return;
 
@@ -62,8 +87,25 @@ const handleDelete = async () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${entryToDelete.id}`, {
+      // Get the authentication token from cookies
+      const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      };
+
+      const headers = {};
+      
+      // Add authorization header if token exists
+      const token = getCookie('better-auth.session_token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`/api/lulu-diary/profiles/${currentUser.username}/diaries/${entryToDelete.id}`, {
         method: 'DELETE',
+        credentials: 'include',
+        headers
       });
 
       if (!res.ok) throw new Error('Error al eliminar la entrada');
@@ -83,12 +125,18 @@ const handleDelete = async () => {
   };
 
   const handleEditTitle = () => {
+    // Solo permitir edición si es el propio perfil del usuario
+    if (!currentUser) return;
+    
     const entry = entries[currentIndex];
     setEditTitle(entry.title);
     setEditingTitle(true);
   };
 
   const handleEditContent = () => {
+    // Solo permitir edición si es el propio perfil del usuario
+    if (!currentUser) return;
+    
     const entry = entries[currentIndex];
     setEditContent(entry.content);
     setEditingContent(true);
@@ -97,11 +145,27 @@ const handleDelete = async () => {
   const saveChanges = async () => {
     const entry = entries[currentIndex];
     try {
-      const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${entry.id}`, {
+      // Get the authentication token from cookies
+      const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      };
+
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
+      // Add authorization header if token exists
+      const token = getCookie('better-auth.session_token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`/api/lulu-diary/profiles/${currentUser.username}/diaries/${entry.id}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        credentials: 'include',
+        headers,
         body: JSON.stringify({
           ...entry,
           title: editTitle || entry.title,
@@ -157,6 +221,7 @@ const handleDelete = async () => {
       <div className="relative z-10 flex items-center justify-center min-h-screen">
         <div className="bg-pink-400 rounded-lg border-4 border-pink-600 p-6 font-pixel">
           <p className="text-white font-bold">✨ LOADING ENTRIES... ✨</p>
+          <p className="text-white text-xs mt-2">User: {currentUser?.username || 'Loading user...'}</p>
         </div>
       </div>
     </div>
@@ -260,12 +325,14 @@ const handleDelete = async () => {
                   ) : (
                     <div className="flex items-center gap-2">
                       <h1 className="text-lg font-bold flex-1 text-pink-900 uppercase tracking-wide">🌟 {entry.title}</h1>
-                      <button
-                        onClick={handleEditTitle}
-                        className="px-2 py-1 bg-cyan-400 hover:bg-cyan-500 text-white rounded text-xs font-bold border-2 border-cyan-600"
-                      >
-                        ✏️
-                      </button>
+                      {currentUser && (
+                        <button
+                          onClick={handleEditTitle}
+                          className="px-2 py-1 bg-cyan-400 hover:bg-cyan-500 text-white rounded text-xs font-bold border-2 border-cyan-600"
+                        >
+                          ✏️
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -298,12 +365,14 @@ const handleDelete = async () => {
                   ) : (
                     <div className="flex gap-2">
                       <p className="text-pink-900 flex-1 text-xs leading-relaxed">{entry.content}</p>
-                      <button
-                        onClick={handleEditContent}
-                        className="px-2 py-1 bg-cyan-400 hover:bg-cyan-500 text-white rounded text-xs font-bold self-start border-2 border-cyan-600"
-                      >
-                        ✏️
-                      </button>
+                      {currentUser && (
+                        <button
+                          onClick={handleEditContent}
+                          className="px-2 py-1 bg-cyan-400 hover:bg-cyan-500 text-white rounded text-xs font-bold self-start border-2 border-cyan-600"
+                        >
+                          ✏️
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -337,7 +406,7 @@ const handleDelete = async () => {
               </button>
               <button
                 onClick={handleDelete}
-                disabled={editingTitle || editingContent}
+                disabled={editingTitle || editingContent || !currentUser}
                 className="flex-1 mx-2 px-4 py-3 bg-red-400 hover:bg-red-500 text-white rounded border-4 border-red-600 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xs uppercase tracking-wider transition-all transform hover:scale-105"
               >
                 🗑️ DELETE
@@ -372,9 +441,9 @@ const handleDelete = async () => {
               <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
             </div>
             <DiaryReactions 
-              username={username} 
+              username={currentUser?.username} 
               diaryId={entry.id} 
-              currentUserId={currentUserId}
+              currentUserId={currentUser?.id}
             />
           </div>
 
@@ -388,9 +457,9 @@ const handleDelete = async () => {
               <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
             </div>
             <Comments 
-              username={username} 
+              username={currentUser?.username} 
               diaryId={entry.id} 
-              currentUserId={currentUserId}
+              currentUserId={currentUser?.id}
             />
           </div>
         </div>

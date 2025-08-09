@@ -88,22 +88,37 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
         profile?.id === currentUserProfile.id
       );
 
+      // Get the authentication token from cookies
+      const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      };
+
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+
+      // Add authorization header if token exists
+      const token = getCookie('better-auth.session_token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       if (isOwnProfile) {
         // Use Me API for current user's profile
         res = await fetch(`/api/lulu-diary/me`, {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          credentials: 'include',
+          headers,
           body: JSON.stringify(formData),
         });
       } else {
         // Use specific profile endpoint for other users
         res = await fetch(`/api/lulu-diary/profiles/${username}`, {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          credentials: 'include',
+          headers,
           body: JSON.stringify(formData),
         });
       }
