@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
-const API_URL = 'http://localhost:5180/api';
+const API_URL = process.env.API_URL;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 /**
