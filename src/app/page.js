@@ -1,7 +1,9 @@
 'use client';
 
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import DiaryHomeButton from '@/components/DiaryHomeButton';
 
 export default function Home() {
   const [currentTime, setCurrentTime] = useState('');
@@ -39,128 +41,90 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden font-kawaii">
-      {/* Background with pixel art sky */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/images/CIELO PIXEL ART.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
-        {/* Overlay gradient for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-50/30 to-purple-100/50"></div>
-      </div>
-
-      {/* Floating sparkles */}
-      {sparkles.map((sparkle) => (
-        <div
-          key={sparkle.id}
-          className="absolute text-2xl animate-float pointer-events-none z-10"
-          style={{
-            left: `${sparkle.left}%`,
-            top: `${sparkle.top}%`,
-            animationDelay: `${sparkle.delay}s`,
-            animationDuration: `${3 + Math.random() * 2}s`
-          }}
-        >
-          {sparkle.emoji}
-        </div>
-      ))}
-
-      {/* Main content */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen p-8">
-        {/* Welcome Panel - Stardew Valley Style */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-kawaii border-4 border-pink-200 p-8 max-w-2xl w-full text-center relative overflow-hidden">
-          {/* Decorative corners */}
-          <div className="absolute top-4 left-4 text-pink-400 text-2xl animate-sparkle">🌸</div>
-          <div className="absolute top-4 right-4 text-purple-400 text-2xl animate-sparkle" style={{animationDelay: '0.5s'}}>⭐</div>
-          <div className="absolute bottom-4 left-4 text-blue-400 text-2xl animate-sparkle" style={{animationDelay: '1s'}}>✨</div>
-          <div className="absolute bottom-4 right-4 text-pink-400 text-2xl animate-sparkle" style={{animationDelay: '1.5s'}}>💕</div>
-
-          {/* Title */}
-          <div className="mb-8">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent mb-4 animate-rainbow font-pixel">
-              🌸 Lulu Diary 🌸
-            </h1>
-            <div className="flex justify-center items-center gap-2 mb-4">
-              <span className="w-3 h-3 bg-pink-400 rounded-full animate-pulse"></span>
-              <span className="w-3 h-3 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></span>
-              <span className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></span>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative font-pixel" style={{backgroundImage: "url('/images/ChatGPT.png')"}}>
+      <div className="relative z-10 flex flex-col justify-center min-h-screen">
+        <div className="max-w-md mx-auto w-full px-4">
+          <div className="bg-cyan-200 rounded-lg border-4 border-purple-500 shadow-2xl relative overflow-hidden font-pixel">
+            {/* Title bar - kawaii style */}
+            <div className="bg-purple-500 p-4 border-b-4 border-purple-600 relative">
+              <div className="text-center relative z-10">
+                <h2 className="text-white text-2xl font-bold uppercase tracking-widest mb-2">
+                  🌸 Lulu Diary 🌸
+                </h2>
+                <div className="flex justify-center items-center gap-2">
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                  <span className="text-purple-100 text-xs uppercase tracking-wider">HOME</span>
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+              {/* Decorative corner elements */}
+              <div className="absolute top-2 left-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+              <div className="absolute top-2 right-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+              <div className="absolute bottom-2 left-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
+              <div className="absolute bottom-2 right-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>
             </div>
-            <p className="text-xl text-gray-600 font-medium">
-              ✨ Your magical kawaii diary adventure awaits! ✨
-            </p>
-          </div>
 
-          {/* Time display - Stardew Valley style */}
-          <div className="bg-gradient-to-r from-pink-100 to-purple-100 rounded-2xl p-4 mb-8 border-2 border-pink-200">
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-2xl animate-float">🕐</span>
-              <div className="text-center">
-                <p className="text-sm text-gray-500 font-medium">Current Time</p>
-                <p className="text-2xl font-bold text-purple-600">{currentTime}</p>
+            <div className="p-6">
+              {/* Welcome message - kawaii style */}
+              <div className="bg-pink-200 rounded-lg border-4 border-pink-600 shadow-lg relative overflow-hidden mb-6">
+                <div className="absolute inset-0 border-2 border-pink-400 rounded-lg m-1"></div>
+                <div className="bg-pink-500 p-3 border-b-2 border-pink-600 relative">
+                  <div className="text-center">
+                    <h3 className="text-white font-bold text-sm uppercase tracking-wider">
+                      ✨ WELCOME MESSAGE ✨
+                    </h3>
+                  </div>
+                  <div className="absolute top-1 left-2 w-1 h-1 bg-yellow-300"></div>
+                  <div className="absolute top-1 right-2 w-1 h-1 bg-yellow-300"></div>
+                </div>
+                <div className="p-4 bg-cyan-300 relative">
+                  <div className="absolute inset-0 opacity-10" style={{
+                    backgroundImage: `radial-gradient(circle at 1px 1px, rgba(219, 39, 119, 0.3) 1px, transparent 0)`,
+                    backgroundSize: '8px 8px'
+                  }}></div>
+                  <p className="text-pink-900 text-xs text-center relative z-10 uppercase tracking-wide">
+                    ✨ Your magical kawaii diary adventure awaits! ✨
+                  </p>
+                </div>
+              </div>
+
+              {/* Time display - kawaii style */}
+              <div className="bg-orange-100 rounded-lg border-4 border-orange-500 p-6 relative overflow-hidden mb-6">
+                <div className="bg-orange-400 p-3 border-b-4 border-orange-500 mb-6 relative -mx-6 -mt-6">
+                  <h3 className="text-white text-lg font-bold uppercase tracking-wider text-center">
+                    🕐 Current Time
+                  </h3>
+                  <div className="absolute top-1 left-2 w-2 h-2 bg-yellow-400"></div>
+                  <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
+                </div>
+                <div className="flex items-center justify-center gap-3">
+                  <span className="text-2xl animate-float">🕐</span>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-purple-600">{currentTime}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action buttons - kawaii style */}
+              <DiaryHomeButton />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <Link href="/login">
+                  <button className="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-3 px-6 rounded-2xl border-4 border-purple-600 hover:from-purple-500 hover:to-purple-600 transition-all font-bold shadow-kawaii transform hover:scale-105">
+                    <span className="flex items-center justify-center gap-2">
+                      <span>🔐</span> Login
+                    </span>
+                  </button>
+                </Link>
+                <Link href="/register">
+                  <button className="w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 px-6 rounded-2xl border-4 border-blue-600 hover:from-blue-500 hover:to-blue-600 transition-all font-bold shadow-kawaii transform hover:scale-105">
+                    <span className="flex items-center justify-center gap-2">
+                      <span>🌟</span> Register
+                    </span>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
-
-          {/* Action buttons - Stardew Valley inspired */}
-          <div className="space-y-4">
-            <Link href="/dniph">
-              <button className="w-full bg-gradient-to-r from-pink-400 to-pink-500 text-white py-4 px-8 rounded-2xl hover:from-pink-500 hover:to-pink-600 transition-all font-bold text-lg shadow-kawaii transform hover:scale-105 border-2 border-pink-300 relative overflow-hidden">
-                <span className="relative z-10 flex items-center justify-center gap-3">
-                  <span>📖</span> Start Your Diary Journey <span>✨</span>
-                </span>
-                {/* Button sparkles */}
-                <div className="absolute top-1 left-1/4 text-white/30 text-sm animate-sparkle">⭐</div>
-                <div className="absolute bottom-1 right-1/4 text-white/30 text-sm animate-sparkle" style={{animationDelay: '0.5s'}}>✨</div>
-              </button>
-            </Link>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Link href="/login">
-                <button className="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-3 px-6 rounded-2xl hover:from-purple-500 hover:to-purple-600 transition-all font-bold shadow-kawaii transform hover:scale-105 border-2 border-purple-300">
-                  <span className="flex items-center justify-center gap-2">
-                    <span>🔐</span> Login
-                  </span>
-                </button>
-              </Link>
-
-              <Link href="/register">
-                <button className="w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 px-6 rounded-2xl hover:from-blue-500 hover:to-blue-600 transition-all font-bold shadow-kawaii transform hover:scale-105 border-2 border-blue-300">
-                  <span className="flex items-center justify-center gap-2">
-                    <span>🌟</span> Register
-                  </span>
-                </button>
-              </Link>
-            </div>
-          </div>
-
-          {/* Kawaii message */}
-          <div className="mt-8 p-4 bg-gradient-to-r from-yellow-50 to-pink-50 rounded-2xl border-2 border-yellow-200">
-            <p className="text-gray-600 font-medium flex items-center justify-center gap-2">
-              <span className="animate-float">🌸</span>
-              <span>Welcome to your personal kawaii space!</span>
-              <span className="animate-float" style={{animationDelay: '0.5s'}}>🌸</span>
-            </p>
-          </div>
-        </div>
-
-        {/* Bottom decorative elements */}
-        <div className="mt-8 flex justify-center items-center gap-8">
-          <div className="text-4xl animate-float">🌸</div>
-          <div className="text-3xl animate-sparkle">⭐</div>
-          <div className="text-4xl animate-float" style={{animationDelay: '0.5s'}}>💕</div>
-          <div className="text-3xl animate-sparkle" style={{animationDelay: '0.8s'}}>✨</div>
-          <div className="text-4xl animate-float" style={{animationDelay: '1s'}}>🌸</div>
-        </div>
-
-        {/* Kawaii footer */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500 bg-white/70 px-4 py-2 rounded-full border border-pink-200">
-            Made with 💕 for kawaii diary lovers
-          </p>
         </div>
       </div>
     </div>
