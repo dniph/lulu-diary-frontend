@@ -107,16 +107,6 @@ export default function UserProfilePage({ params }) {
               >
                 👤 Perfil
               </button>
-              <button
-                onClick={() => setActiveTab('friends')}
-                className={`px-6 py-3 rounded-md font-medium transition ${
-                  activeTab === 'friends'
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                }`}
-              >
-                👥 Amigos
-              </button>
             </div>
           </div>
 
@@ -147,15 +137,6 @@ export default function UserProfilePage({ params }) {
               </div>
             )}
 
-            {activeTab === 'friends' && (
-              <div className="flex justify-center">
-                <FriendsSystem 
-                  username={username} 
-                  currentUserId={currentUser?.id} 
-                  isOwnProfile={isOwnProfile} 
-                />
-              </div>
-            )}
           </div>
         </div>
       </div>

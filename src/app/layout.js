@@ -21,6 +21,7 @@ export default async function RootLayout({ children }) {
           <Link href="/" className="hover:underline">Home</Link>
           <ProfileLink />
           <Link href="/diary" className="hover:underline">Diary</Link>
+          <Link href="/friends" className="hover:underline">Friends</Link>
           {isLoggedIn ? (
             <>
               <SignOut />
