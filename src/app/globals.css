@@ -84,5 +84,9 @@ body {
 }
 
 html {
-  cursor: url('/cursors/Pawcursor.cur'), auto;
+  cursor: url('/cursors/Pawcursor.cur'), auto !important;
+}
+
+*, *:hover, *:active, *:focus {
+  cursor: url('/cursors/Pawcursor.cur'), auto !important;
 }
