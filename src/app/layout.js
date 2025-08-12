@@ -33,7 +33,7 @@ export default async function RootLayout({ children }) {
             </>
           )}
         </nav>
-        <main className="p-8">{children}</main>
+        <main >{children}</main>
       </body>
     </html>
   );
