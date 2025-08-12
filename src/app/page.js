@@ -109,20 +109,6 @@ export default function Home() {
               {/* Action buttons - kawaii style */}
               <DiaryHomeButton />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <Link href="/login">
-                  <button className="w-full bg-gradient-to-r from-purple-400 to-purple-500 text-white py-3 px-6 rounded-2xl border-4 border-purple-600 hover:from-purple-500 hover:to-purple-600 transition-all font-bold shadow-kawaii transform hover:scale-105">
-                    <span className="flex items-center justify-center gap-2">
-                      <span>🔐</span> Login
-                    </span>
-                  </button>
-                </Link>
-                <Link href="/register">
-                  <button className="w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white py-3 px-6 rounded-2xl border-4 border-blue-600 hover:from-blue-500 hover:to-blue-600 transition-all font-bold shadow-kawaii transform hover:scale-105">
-                    <span className="flex items-center justify-center gap-2">
-                      <span>🌟</span> Register
-                    </span>
-                  </button>
-                </Link>
               </div>
             </div>
           </div>

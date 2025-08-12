@@ -53,39 +53,39 @@ export default function Feed() {
 
   return (
     <div className="space-y-6 mt-8">
-      {feed.map((entry) => (
-        <div key={entry.id} className="bg-white/80 rounded-lg border-4 border-pink-300 shadow-lg p-4 font-pixel relative overflow-hidden">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-lg font-bold border-2 border-pink-300 shadow">
-              {entry.authorName ? entry.authorName.charAt(0).toUpperCase() : "👤"}
+      {feed.map((item) => {
+        const { diary, profile } = item;
+        return (
+          <div key={diary.id} className="bg-white/80 rounded-lg border-4 border-pink-300 shadow-lg p-4 font-pixel relative overflow-hidden">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-lg font-bold border-2 border-pink-300 shadow">
+                {profile.displayName ? profile.displayName.charAt(0).toUpperCase() : (profile.username ? profile.username.charAt(0).toUpperCase() : "👤")}
+              </div>
+              <div>
+                <div className="font-bold text-pink-800">{profile.displayName || `@${profile.username}`}</div>
+                <div className="text-xs text-cyan-600 font-mono">@{profile.username}</div>
+              </div>
+              <div className="ml-auto text-xs text-pink-400 font-mono">
+                {diary.createdAt && new Date(diary.createdAt).toLocaleString()}
+              </div>
             </div>
-            <div>
-              <div className="font-bold text-pink-800">{entry.authorName || `@${entry.authorUsername}`}</div>
-              <div className="text-xs text-cyan-600 font-mono">@{entry.authorUsername}</div>
+            <div className="mb-2">
+              <span className="font-bold text-purple-700">{diary.title}</span>
             </div>
-            <div className="ml-auto text-xs text-pink-400 font-mono">
-              {entry.createdAt && new Date(entry.createdAt).toLocaleString()}
+            <div className="text-pink-700 text-sm mb-2 whitespace-pre-line">
+              {diary.content}
             </div>
+            <div className="flex gap-2 text-xs">
+              <span className="bg-pink-200 text-pink-700 px-2 py-1 rounded-full border border-pink-400">{diary.visibility === "public" ? "🌍 Público" : diary.visibility === "friends-only" ? "👥 Solo amigos" : "🔒 Privado"}</span>
+            </div>
+            {/* Kawaii-style corner decorations */}
+            <div className="absolute top-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-b-2 border-pink-700"></div>
+            <div className="absolute top-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-b-2 border-pink-700"></div>
+            <div className="absolute bottom-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-t-2 border-pink-700"></div>
+            <div className="absolute bottom-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-t-2 border-pink-700"></div>
           </div>
-          <div className="mb-2">
-            <span className="font-bold text-purple-700">{entry.title}</span>
-          </div>
-          <div className="text-pink-700 text-sm mb-2 whitespace-pre-line">
-            {entry.content}
-          </div>
-          <div className="flex gap-2 text-xs">
-            <span className="bg-pink-200 text-pink-700 px-2 py-1 rounded-full border border-pink-400">{entry.visibility === "public" ? "🌍 Público" : entry.visibility === "friends-only" ? "👥 Solo amigos" : "🔒 Privado"}</span>
-            {entry.tags && entry.tags.length > 0 && (
-              <span className="bg-cyan-200 text-cyan-700 px-2 py-1 rounded-full border border-cyan-400">{entry.tags.join(", ")}</span>
-            )}
-          </div>
-          {/* Kawaii-style corner decorations */}
-          <div className="absolute top-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-b-2 border-pink-700"></div>
-          <div className="absolute top-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-b-2 border-pink-700"></div>
-          <div className="absolute bottom-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-t-2 border-pink-700"></div>
-          <div className="absolute bottom-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-t-2 border-pink-700"></div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
