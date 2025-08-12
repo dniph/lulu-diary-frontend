@@ -47,7 +47,7 @@ const [loading, setLoading] = useState(true);
   }
 
   return (
-    <Link href={`/${userProfile.username}`}>
+    <Link href="/diary">
       <button className="w-full bg-gradient-to-r from-pink-400 to-pink-500 text-white py-4 px-8 rounded-2xl border-4 border-pink-600 hover:from-pink-500 hover:to-pink-600 transition-all font-bold text-lg shadow-kawaii transform hover:scale-105 relative overflow-hidden">
           <span className="relative z-10 flex items-center justify-center gap-3">
             <span>📖</span> Go to my diary <span>✨</span>

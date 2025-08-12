@@ -158,7 +158,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
               : 'bg-white border-yellow-300 text-yellow-700 hover:bg-pink-100 hover:border-pink-400 hover:text-pink-700'
           }`}
         >
-          Recibidas ({incomingRequests.length})
+          Incoming ({incomingRequests.length})
         </button>
         <button
           onClick={() => setActiveTab('outgoing')}
@@ -168,7 +168,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
               : 'bg-white border-yellow-300 text-yellow-700 hover:bg-cyan-100 hover:border-cyan-400 hover:text-cyan-700'
           }`}
         >
-          Enviadas ({outgoingRequests.length})
+          Outgoing ({outgoingRequests.length})
         </button>
       </div>
 
@@ -241,7 +241,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
           ) : (
             <div className="text-center py-8 text-pink-500 font-pixel">
               <div className="text-5xl mb-2">👥</div>
-              <p className="font-bold">No tienes solicitudes de amistad pendientes</p>
+              <p className="font-bold">You have no pending friend requests</p>
             </div>
           )}
         </div>
@@ -289,7 +289,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
           ) : (
             <div className="text-center py-8 text-cyan-500 font-pixel">
               <div className="text-5xl mb-2">📤</div>
-              <p className="font-bold">No has enviado solicitudes de amistad</p>
+              <p className="font-bold">You have not sent any friend requests</p>
             </div>
           )}
         </div>
@@ -323,14 +323,14 @@ function SendFriendRequestForm({ onRequestSent, actionLoading }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-3 font-pixel">
       <h3 className="text-lg font-bold text-yellow-800 uppercase tracking-wider mb-2 flex items-center gap-2">
-        <span>✨</span> Enviar Solicitud de Amistad
+  <span>✨</span> Send Friend Request
       </h3>
       <div className="flex gap-2">
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Nombre de usuario (ej: Varto)"
+          placeholder="Username (e.g. Varto)"
           className="flex-1 px-3 py-2 border-2 border-yellow-400 rounded-lg font-pixel text-yellow-700 bg-yellow-50 focus:ring-2 focus:ring-yellow-300 focus:border-yellow-500 placeholder-yellow-300"
           required
         />
@@ -342,10 +342,10 @@ function SendFriendRequestForm({ onRequestSent, actionLoading }) {
           {actionLoading[`send-${username}`] ? (
             <div className="flex items-center gap-2">
               <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span>Enviando...</span>
+              <span>Sending...</span>
             </div>
           ) : (
-            'Enviar'
+            'Send'
           )}
         </button>
       </div>
