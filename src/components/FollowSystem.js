@@ -108,7 +108,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
     return (
       <div className="flex items-center justify-center py-4">
         <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-        <span className="ml-2 text-sm text-gray-500">Cargando...</span>
+  <span className="ml-2 text-sm text-gray-500">Loading...</span>
       </div>
     );
   }
@@ -123,7 +123,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
             className="text-center hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
           >
             <div className="text-xl font-bold text-gray-900">{followers.length}</div>
-            <div className="text-sm text-gray-600">Seguidores</div>
+            <div className="text-sm text-gray-600">Followers</div>
           </button>
           
           <button
@@ -131,7 +131,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
             className="text-center hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
           >
             <div className="text-xl font-bold text-gray-900">{following.length}</div>
-            <div className="text-sm text-gray-600">Siguiendo</div>
+            <div className="text-sm text-gray-600">Following</div>
           </button>
         </div>
 
@@ -149,10 +149,10 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
             {actionLoading ? (
               <div className="flex items-center gap-2">
                 <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-current"></div>
-                <span>{isFollowing ? 'Dejando...' : 'Siguiendo...'}</span>
+                <span>{isFollowing ? 'Unfollowing...' : 'Following...'}</span>
               </div>
             ) : (
-              <span>{isFollowing ? 'Siguiendo' : 'Seguir'}</span>
+              <span>{isFollowing ? 'Following' : 'Follow'}</span>
             )}
           </button>
         )}
@@ -161,7 +161,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
       {/* Followers List */}
       {showFollowers && (
         <div className="mb-4 p-4 bg-gray-50 rounded-lg">
-          <h3 className="font-semibold text-gray-900 mb-3">Seguidores ({followers.length})</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Followers ({followers.length})</h3>
           {followers.length > 0 ? (
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {followers.map((follower) => (
@@ -172,23 +172,23 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">
-                        {follower.followerName || `Usuario ${follower.followerId}`}
+                        {follower.followerName || `User ${follower.followerId}`}
                       </div>
                       {follower.followedAt && (
                         <div className="text-xs text-gray-500">
-                          Desde {new Date(follower.followedAt).toLocaleDateString()}
+                          Since {new Date(follower.followedAt).toLocaleDateString()}
                         </div>
                       )}
                     </div>
                   </div>
                   <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                    Ver perfil
+                    View profile
                   </button>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-4">Sin seguidores aún</p>
+            <p className="text-gray-500 text-center py-4">No followers yet</p>
           )}
         </div>
       )}
@@ -196,7 +196,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
       {/* Following List */}
       {showFollowing && (
         <div className="p-4 bg-gray-50 rounded-lg">
-          <h3 className="font-semibold text-gray-900 mb-3">Siguiendo ({following.length})</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">Following ({following.length})</h3>
           {following.length > 0 ? (
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {following.map((followed) => (
@@ -207,23 +207,23 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">
-                        {followed.followedName || followed.profileName || `Usuario ${followed.followedId || followed.profileId}`}
+                        {followed.followedName || followed.profileName || `User ${followed.followedId || followed.profileId}`}
                       </div>
                       {followed.followedAt && (
                         <div className="text-xs text-gray-500">
-                          Desde {new Date(followed.followedAt).toLocaleDateString()}
+                          Since {new Date(followed.followedAt).toLocaleDateString()}
                         </div>
                       )}
                     </div>
                   </div>
                   <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                    Ver perfil
+                    View profile
                   </button>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-4">No sigue a nadie aún</p>
+            <p className="text-gray-500 text-center py-4">Not following anyone yet</p>
           )}
         </div>
       )}

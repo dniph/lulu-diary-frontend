@@ -36,7 +36,7 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
 
   // Filter friends based on search term
   const filteredFriends = friends.filter(friend => {
-    const name = friend.friendName || friend.name || `Usuario ${friend.friendId || friend.id}`;
+    const name = friend.friendName || friend.name || `User ${friend.friendId || friend.id}`;
     const friendUsername = friend.friendUsername || friend.username || `user${friend.friendId || friend.id}`;
     return name.toLowerCase().includes(searchTerm.toLowerCase()) ||
            friendUsername.toLowerCase().includes(searchTerm.toLowerCase());
@@ -47,7 +47,7 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
       <div className="flex items-center justify-center py-12 font-pixel">
         <div className="bg-yellow-100 rounded-lg border-4 border-orange-500 shadow-2xl p-6 flex flex-col items-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-4 border-pink-500 mb-2"></div>
-          <span className="text-pink-700 font-bold text-lg">Cargando amigos...</span>
+          <span className="text-pink-700 font-bold text-lg">Loading friends...</span>
         </div>
       </div>
     );
@@ -73,7 +73,7 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar amigos..."
+            placeholder="Search friends..."
             className="w-full px-4 py-2 border-2 border-pink-400 rounded-lg font-pixel text-pink-700 bg-pink-50 focus:ring-2 focus:ring-pink-300 focus:border-pink-500 placeholder-pink-300"
           />
         </div>
@@ -146,7 +146,7 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
                 onClick={() => setSearchTerm('')}
                 className="mt-2 text-cyan-600 hover:text-cyan-800 text-sm font-bold underline"
               >
-                Limpiar búsqueda
+                Clear search
               </button>
             </div>
           ) : (
@@ -155,13 +155,13 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
               <div className="text-5xl mb-2">👫</div>
               <p className="font-bold">
                 {isOwnProfile 
-                  ? 'Aún no tienes amigos. ¡Envía algunas solicitudes de amistad!'
-                  : `@${username} aún no tiene amigos públicos.`
+                  ? "You don't have any friends yet. Send some friend requests!"
+                  : `@${username} doesn't have any public friends yet.`
                 }
               </p>
               {isOwnProfile && (
                 <p className="text-xs mt-2 text-cyan-400">
-                  Ve a &ldquo;Solicitudes de Amistad&rdquo; para conectar con otros usuarios.
+                  Go to &quot;Friend Requests&quot; to connect with other users.
                 </p>
               )}
             </div>

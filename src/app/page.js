@@ -52,11 +52,6 @@ export default function Home() {
                 <h2 className="text-white text-2xl font-bold uppercase tracking-widest mb-2">
                   🌸 Lulu Diary 🌸
                 </h2>
-                <div className="flex justify-center items-center gap-2">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                  <span className="text-purple-100 text-xs uppercase tracking-wider">HOME</span>
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-                </div>
               </div>
               {/* Decorative corner elements */}
               <div className="absolute top-2 left-2 w-3 h-3 bg-yellow-400 border border-yellow-500"></div>

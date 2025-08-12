@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { parseISO, format, isSameDay } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import Comments from './Comments';
 import DiaryReactions from './DiaryReactions';
 
@@ -196,7 +196,7 @@ const handleDelete = async () => {
   };
 
   const formatDate = (dateString) =>
-    format(parseISO(dateString), 'EEEE d MMMM yyyy', { locale: es });
+    format(parseISO(dateString), 'EEEE d MMMM yyyy', { locale: enUS });
 
   const getVisibilityIcon = (visibility) => {
     switch (visibility) {
@@ -209,10 +209,10 @@ const handleDelete = async () => {
 
   const getVisibilityText = (visibility) => {
     switch (visibility) {
-      case 'public': return 'Público';
-      case 'friends-only': return 'Solo amigos';
-      case 'private': return 'Privado';
-      default: return 'Privado';
+      case 'public': return 'Public';
+      case 'friends-only': return 'Friends only';
+      case 'private': return 'Private';
+      default: return 'Private';
     }
   };
 

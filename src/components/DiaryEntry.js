@@ -5,9 +5,9 @@ import { authenticatedFetch } from '@/lib/auth-utils';
 
 function Entry({ title, content, date, visibility }) {
   const formatDate = (dateString) => {
-    if (!dateString) return 'Fecha no disponible';
+    if (!dateString) return 'Date not available';
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -27,10 +27,10 @@ function Entry({ title, content, date, visibility }) {
 
   const getVisibilityText = (visibility) => {
     switch (visibility) {
-      case 'public': return 'Público';
-      case 'friends-only': return 'Solo amigos';
-      case 'private': return 'Privado';
-      default: return 'Privado';
+      case 'public': return 'Public';
+      case 'friends-only': return 'Friends only';
+      case 'private': return 'Private';
+      default: return 'Private';
     }
   };
 

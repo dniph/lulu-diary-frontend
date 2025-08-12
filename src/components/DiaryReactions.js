@@ -135,7 +135,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
     return (
       <div className="mt-4 flex items-center justify-center py-2">
         <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-        <span className="ml-2 text-sm text-gray-500">Cargando reacciones...</span>
+  <span className="ml-2 text-sm text-gray-500">Loading reactions...</span>
       </div>
     );
   }
@@ -156,7 +156,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
             )}
           </div>
           <span className="text-sm text-gray-600">
-            {totalReactions} {totalReactions === 1 ? 'reacción' : 'reacciones'}
+            {totalReactions} {totalReactions === 1 ? 'reaction' : 'reactions'}
           </span>
         </div>
       )}
@@ -198,7 +198,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
         <div className="mt-3 pt-2 border-t border-gray-50">
           <details className="group">
             <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
-              Ver quién reaccionó ▼
+              See who reacted ▼
             </summary>
             <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
               {groupedReactions.map(reactionType => (
@@ -206,7 +206,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
                   <span className="inline-flex items-center gap-1">
                     <span>{reactionType.emoji}</span>
                     <span className="font-medium">{reactionType.label}:</span>
-                    <span>{reactionType.count} {reactionType.count === 1 ? 'persona' : 'personas'}</span>
+                    <span>{reactionType.count} {reactionType.count === 1 ? 'person' : 'people'}</span>
                   </span>
                 </div>
               ))}
@@ -218,7 +218,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
       {/* Empty state message */}
       {totalReactions === 0 && !loading && (
         <p className="text-xs text-gray-400 text-center py-2">
-          ¡Sé el primero en reaccionar a esta entrada!
+          Be the first to react to this entry!
         </p>
       )}
     </div>

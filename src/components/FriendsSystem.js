@@ -25,7 +25,7 @@ export default function FriendsSystem({ username, currentUserId = 1, isOwnProfil
                   : 'bg-white border-blue-300 text-blue-700 hover:bg-pink-100 hover:border-pink-400 hover:text-pink-700'
               }`}
             >
-              <span className="text-lg mr-1">👥</span> Amigos
+              <span className="text-lg mr-1">👥</span> Friends
             </button>
             {isOwnProfile && (
               <button
@@ -36,7 +36,7 @@ export default function FriendsSystem({ username, currentUserId = 1, isOwnProfil
                     : 'bg-white border-blue-300 text-blue-700 hover:bg-yellow-100 hover:border-yellow-400 hover:text-yellow-700'
                 }`}
               >
-                <span className="text-lg mr-1">📮</span> Solicitudes
+                <span className="text-lg mr-1">📮</span> Requests
               </button>
             )}
           </div>

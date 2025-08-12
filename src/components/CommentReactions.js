@@ -213,7 +213,7 @@ export default function CommentReactions({ username, diaryId, commentId, current
                       <span>
                         {usersWithReaction.map((reaction, index) => (
                           <span key={reaction.profileId}>
-                            {reaction.profileName || `Usuario ${reaction.profileId}`}
+                            {reaction.profileName || `User ${reaction.profileId}`}
                             {index < usersWithReaction.length - 1 ? ', ' : ''}
                           </span>
                         ))}

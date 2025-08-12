@@ -60,7 +60,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
           'Content-Type': 'application/json',
           'X-Current-User-Id': currentUserId.toString()
         },
-        body: JSON.stringify({ recipientUsername: username }),
+        body: JSON.stringify({ requestedUsername: username }),
       });
 
       if (!res.ok) throw new Error('Error al enviar solicitud de amistad');
@@ -135,7 +135,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
       <div className="flex items-center justify-center py-12 font-pixel">
         <div className="bg-yellow-100 rounded-lg border-4 border-orange-500 shadow-2xl p-6 flex flex-col items-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-4 border-pink-500 mb-2"></div>
-          <span className="text-pink-700 font-bold text-lg">Cargando solicitudes...</span>
+          <span className="text-pink-700 font-bold text-lg">Loading requests...</span>
         </div>
       </div>
     );
@@ -146,7 +146,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
       {/* Decorative border */}
       <div className="absolute inset-0 border-4 border-yellow-300 rounded-lg m-2 pointer-events-none"></div>
       <h2 className="text-2xl font-bold text-yellow-800 uppercase tracking-wider flex items-center gap-2 mb-4">
-        <span>📮</span> Solicitudes de Amistad
+        <span>📮</span> Friend Requests
       </h2>
       {/* Tabs */}
       <div className="flex border-b-4 border-yellow-300 mb-4 gap-2">
@@ -176,65 +176,68 @@ export default function FriendRequests({ currentUserId = 1 }) {
       {activeTab === 'incoming' && (
         <div className="space-y-3">
           {incomingRequests.length > 0 ? (
-            incomingRequests.map((request) => (
-              <div key={request.id} className="flex items-center justify-between p-4 bg-pink-50 rounded-lg border-4 border-pink-300 shadow-md relative overflow-hidden">
-                {/* Decorative border */}
-                <div className="absolute inset-0 border-2 border-pink-200 rounded-lg m-1 pointer-events-none"></div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-yellow-400 rounded-full flex items-center justify-center text-white font-bold border-2 border-pink-300 shadow">
-                    {(request.senderName || `Usuario ${request.senderId}`).charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <div className="font-bold text-pink-900 text-lg">
-                      {request.senderName || `Usuario ${request.senderId}`}
+            incomingRequests.map((item) => {
+              const { request, profile } = item;
+              return (
+                <div key={request.id} className="flex items-center justify-between p-4 bg-pink-50 rounded-lg border-4 border-pink-300 shadow-md relative overflow-hidden">
+                  {/* Decorative border */}
+                  <div className="absolute inset-0 border-2 border-pink-200 rounded-lg m-1 pointer-events-none"></div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-yellow-400 rounded-full flex items-center justify-center text-white font-bold border-2 border-pink-300 shadow">
+                      {(profile.displayName || profile.username || `User ${profile.id}`).charAt(0).toUpperCase()}
                     </div>
-                    <div className="text-xs text-pink-600 font-mono">
-                      @{request.senderUsername || `user${request.senderId}`}
+                    <div>
+                      <div className="font-bold text-pink-900 text-lg">
+                        {profile.displayName || profile.username || `User ${profile.id}`}
+                      </div>
+                      <div className="text-xs text-pink-600 font-mono">
+                        @{profile.username || `user${profile.id}`}
+                      </div>
+                      {request.createdAt && (
+                        <div className="text-xs text-pink-400">
+                          {new Date(request.createdAt).toLocaleDateString()}
+                        </div>
+                      )}
                     </div>
-                    {request.sentAt && (
-                      <div className="text-xs text-pink-400">
-                        {new Date(request.sentAt).toLocaleDateString()}
-                      </div>
-                    )}
                   </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleAcceptRequest(request.id)}
+                      disabled={actionLoading[`accept-${request.id}`]}
+                      className="px-3 py-1.5 bg-green-400 text-white text-xs font-bold rounded-lg border-2 border-green-600 hover:bg-green-500 transition-all shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {actionLoading[`accept-${request.id}`] ? (
+                        <div className="flex items-center gap-1">
+                          <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                          <span>...</span>
+                        </div>
+                      ) : (
+                        'Accept'
+                      )}
+                    </button>
+                    <button
+                      onClick={() => handleRejectRequest(request.id)}
+                      disabled={actionLoading[`reject-${request.id}`]}
+                      className="px-3 py-1.5 bg-red-400 text-white text-xs font-bold rounded-lg border-2 border-red-600 hover:bg-red-500 transition-all shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {actionLoading[`reject-${request.id}`] ? (
+                        <div className="flex items-center gap-1">
+                          <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                          <span>...</span>
+                        </div>
+                      ) : (
+                        'Reject'
+                      )}
+                    </button>
+                  </div>
+                  {/* Kawaii-style corner decorations */}
+                  <div className="absolute top-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-b-2 border-pink-700"></div>
+                  <div className="absolute top-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-b-2 border-pink-700"></div>
+                  <div className="absolute bottom-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-t-2 border-pink-700"></div>
+                  <div className="absolute bottom-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-t-2 border-pink-700"></div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleAcceptRequest(request.id)}
-                    disabled={actionLoading[`accept-${request.id}`]}
-                    className="px-3 py-1.5 bg-green-400 text-white text-xs font-bold rounded-lg border-2 border-green-600 hover:bg-green-500 transition-all shadow disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {actionLoading[`accept-${request.id}`] ? (
-                      <div className="flex items-center gap-1">
-                        <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
-                        <span>...</span>
-                      </div>
-                    ) : (
-                      'Aceptar'
-                    )}
-                  </button>
-                  <button
-                    onClick={() => handleRejectRequest(request.id)}
-                    disabled={actionLoading[`reject-${request.id}`]}
-                    className="px-3 py-1.5 bg-red-400 text-white text-xs font-bold rounded-lg border-2 border-red-600 hover:bg-red-500 transition-all shadow disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {actionLoading[`reject-${request.id}`] ? (
-                      <div className="flex items-center gap-1">
-                        <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
-                        <span>...</span>
-                      </div>
-                    ) : (
-                      'Rechazar'
-                    )}
-                  </button>
-                </div>
-                {/* Kawaii-style corner decorations */}
-                <div className="absolute top-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-b-2 border-pink-700"></div>
-                <div className="absolute top-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-b-2 border-pink-700"></div>
-                <div className="absolute bottom-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-t-2 border-pink-700"></div>
-                <div className="absolute bottom-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-t-2 border-pink-700"></div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="text-center py-8 text-pink-500 font-pixel">
               <div className="text-5xl mb-2">👥</div>
@@ -248,38 +251,41 @@ export default function FriendRequests({ currentUserId = 1 }) {
       {activeTab === 'outgoing' && (
         <div className="space-y-3">
           {outgoingRequests.length > 0 ? (
-            outgoingRequests.map((request) => (
-              <div key={request.id} className="flex items-center justify-between p-4 bg-cyan-50 rounded-lg border-4 border-cyan-300 shadow-md relative overflow-hidden">
-                {/* Decorative border */}
-                <div className="absolute inset-0 border-2 border-cyan-200 rounded-lg m-1 pointer-events-none"></div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-yellow-400 rounded-full flex items-center justify-center text-white font-bold border-2 border-cyan-300 shadow">
-                    {(request.recipientName || `Usuario ${request.recipientId}`).charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <div className="font-bold text-cyan-900 text-lg">
-                      {request.recipientName || `Usuario ${request.recipientId}`}
+            outgoingRequests.map((item) => {
+              const { request, profile } = item;
+              return (
+                <div key={request.id} className="flex items-center justify-between p-4 bg-cyan-50 rounded-lg border-4 border-cyan-300 shadow-md relative overflow-hidden">
+                  {/* Decorative border */}
+                  <div className="absolute inset-0 border-2 border-cyan-200 rounded-lg m-1 pointer-events-none"></div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-yellow-400 rounded-full flex items-center justify-center text-white font-bold border-2 border-cyan-300 shadow">
+                      {(profile.displayName || profile.username || `User ${profile.id}`).charAt(0).toUpperCase()}
                     </div>
-                    <div className="text-xs text-cyan-600 font-mono">
-                      @{request.recipientUsername || `user${request.recipientId}`}
-                    </div>
-                    {request.sentAt && (
-                      <div className="text-xs text-cyan-400">
-                        Enviada {new Date(request.sentAt).toLocaleDateString()}
+                    <div>
+                      <div className="font-bold text-cyan-900 text-lg">
+                        {profile.displayName || profile.username || `User ${profile.id}`}
                       </div>
-                    )}
+                      <div className="text-xs text-cyan-600 font-mono">
+                        @{profile.username || `user${profile.id}`}
+                      </div>
+                      {request.createdAt && (
+                        <div className="text-xs text-cyan-400">
+                          Sent {new Date(request.createdAt).toLocaleDateString()}
+                        </div>
+                      )}
+                    </div>
                   </div>
+                  <div className="text-xs text-yellow-600 font-bold">
+                    Pending
+                  </div>
+                  {/* Kawaii-style corner decorations */}
+                  <div className="absolute top-0 left-0 w-2 h-2 bg-cyan-400 border-r-2 border-b-2 border-cyan-700"></div>
+                  <div className="absolute top-0 right-0 w-2 h-2 bg-cyan-400 border-l-2 border-b-2 border-cyan-700"></div>
+                  <div className="absolute bottom-0 left-0 w-2 h-2 bg-cyan-400 border-r-2 border-t-2 border-cyan-700"></div>
+                  <div className="absolute bottom-0 right-0 w-2 h-2 bg-cyan-400 border-l-2 border-t-2 border-cyan-700"></div>
                 </div>
-                <div className="text-xs text-yellow-600 font-bold">
-                  Pendiente
-                </div>
-                {/* Kawaii-style corner decorations */}
-                <div className="absolute top-0 left-0 w-2 h-2 bg-cyan-400 border-r-2 border-b-2 border-cyan-700"></div>
-                <div className="absolute top-0 right-0 w-2 h-2 bg-cyan-400 border-l-2 border-b-2 border-cyan-700"></div>
-                <div className="absolute bottom-0 left-0 w-2 h-2 bg-cyan-400 border-r-2 border-t-2 border-cyan-700"></div>
-                <div className="absolute bottom-0 right-0 w-2 h-2 bg-cyan-400 border-l-2 border-t-2 border-cyan-700"></div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="text-center py-8 text-cyan-500 font-pixel">
               <div className="text-5xl mb-2">📤</div>

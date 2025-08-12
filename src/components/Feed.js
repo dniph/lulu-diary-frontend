@@ -46,7 +46,7 @@ export default function Feed() {
     return (
       <div className="text-center text-cyan-600 font-pixel py-8">
         <span className="text-3xl">🌸</span>
-        <div>No hay entradas en el feed todavía.</div>
+  <div>There are no entries in the feed yet.</div>
       </div>
     );
   }
@@ -76,7 +76,7 @@ export default function Feed() {
               {diary.content}
             </div>
             <div className="flex gap-2 text-xs">
-              <span className="bg-pink-200 text-pink-700 px-2 py-1 rounded-full border border-pink-400">{diary.visibility === "public" ? "🌍 Público" : diary.visibility === "friends-only" ? "👥 Solo amigos" : "🔒 Privado"}</span>
+              <span className="bg-pink-200 text-pink-700 px-2 py-1 rounded-full border border-pink-400">{diary.visibility === "public" ? "🌍 Public" : diary.visibility === "friends-only" ? "👥 Friends only" : "🔒 Private"}</span>
             </div>
             {/* Kawaii-style corner decorations */}
             <div className="absolute top-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-b-2 border-pink-700"></div>
