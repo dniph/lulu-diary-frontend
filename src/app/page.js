@@ -41,7 +41,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative font-pixel" style={{backgroundImage: "url('/images/ChatGPT.png')"}}>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative font-pixel" style={{backgroundImage: "url('/images/CIELO PIXEL ART.png')"}}>
       <div className="relative z-10 flex flex-col justify-center min-h-screen">
         <div className="max-w-md mx-auto w-full px-4">
           <div className="bg-cyan-200 rounded-lg border-4 border-purple-500 shadow-2xl relative overflow-hidden font-pixel">

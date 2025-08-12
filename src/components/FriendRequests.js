@@ -132,35 +132,40 @@ export default function FriendRequests({ currentUserId = 1 }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-        <span className="ml-2 text-gray-500">Cargando solicitudes...</span>
+      <div className="flex items-center justify-center py-12 font-pixel">
+        <div className="bg-yellow-100 rounded-lg border-4 border-orange-500 shadow-2xl p-6 flex flex-col items-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-4 border-pink-500 mb-2"></div>
+          <span className="text-pink-700 font-bold text-lg">Cargando solicitudes...</span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Solicitudes de Amistad</h2>
-      
+    <div className="bg-yellow-100 rounded-lg border-4 border-yellow-500 shadow-lg p-6 font-pixel relative overflow-hidden">
+      {/* Decorative border */}
+      <div className="absolute inset-0 border-4 border-yellow-300 rounded-lg m-2 pointer-events-none"></div>
+      <h2 className="text-2xl font-bold text-yellow-800 uppercase tracking-wider flex items-center gap-2 mb-4">
+        <span>📮</span> Solicitudes de Amistad
+      </h2>
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 mb-4">
+      <div className="flex border-b-4 border-yellow-300 mb-4 gap-2">
         <button
           onClick={() => setActiveTab('incoming')}
-          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+          className={`px-6 py-2 text-center font-bold uppercase tracking-wider rounded-t-lg border-4 transition-all duration-200 shadow-md text-xs md:text-sm ${
             activeTab === 'incoming'
-              ? 'border-blue-500 text-blue-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              ? 'bg-pink-200 border-pink-500 text-pink-900 scale-105'
+              : 'bg-white border-yellow-300 text-yellow-700 hover:bg-pink-100 hover:border-pink-400 hover:text-pink-700'
           }`}
         >
           Recibidas ({incomingRequests.length})
         </button>
         <button
           onClick={() => setActiveTab('outgoing')}
-          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+          className={`px-6 py-2 text-center font-bold uppercase tracking-wider rounded-t-lg border-4 transition-all duration-200 shadow-md text-xs md:text-sm ${
             activeTab === 'outgoing'
-              ? 'border-blue-500 text-blue-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              ? 'bg-cyan-200 border-cyan-500 text-cyan-900 scale-105'
+              : 'bg-white border-yellow-300 text-yellow-700 hover:bg-cyan-100 hover:border-cyan-400 hover:text-cyan-700'
           }`}
         >
           Enviadas ({outgoingRequests.length})
@@ -172,20 +177,22 @@ export default function FriendRequests({ currentUserId = 1 }) {
         <div className="space-y-3">
           {incomingRequests.length > 0 ? (
             incomingRequests.map((request) => (
-              <div key={request.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
+              <div key={request.id} className="flex items-center justify-between p-4 bg-pink-50 rounded-lg border-4 border-pink-300 shadow-md relative overflow-hidden">
+                {/* Decorative border */}
+                <div className="absolute inset-0 border-2 border-pink-200 rounded-lg m-1 pointer-events-none"></div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-yellow-400 rounded-full flex items-center justify-center text-white font-bold border-2 border-pink-300 shadow">
                     {(request.senderName || `Usuario ${request.senderId}`).charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-bold text-pink-900 text-lg">
                       {request.senderName || `Usuario ${request.senderId}`}
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-xs text-pink-600 font-mono">
                       @{request.senderUsername || `user${request.senderId}`}
                     </div>
                     {request.sentAt && (
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-pink-400">
                         {new Date(request.sentAt).toLocaleDateString()}
                       </div>
                     )}
@@ -195,7 +202,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
                   <button
                     onClick={() => handleAcceptRequest(request.id)}
                     disabled={actionLoading[`accept-${request.id}`]}
-                    className="px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 bg-green-400 text-white text-xs font-bold rounded-lg border-2 border-green-600 hover:bg-green-500 transition-all shadow disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {actionLoading[`accept-${request.id}`] ? (
                       <div className="flex items-center gap-1">
@@ -209,7 +216,7 @@ export default function FriendRequests({ currentUserId = 1 }) {
                   <button
                     onClick={() => handleRejectRequest(request.id)}
                     disabled={actionLoading[`reject-${request.id}`]}
-                    className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 bg-red-400 text-white text-xs font-bold rounded-lg border-2 border-red-600 hover:bg-red-500 transition-all shadow disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {actionLoading[`reject-${request.id}`] ? (
                       <div className="flex items-center gap-1">
@@ -221,12 +228,17 @@ export default function FriendRequests({ currentUserId = 1 }) {
                     )}
                   </button>
                 </div>
+                {/* Kawaii-style corner decorations */}
+                <div className="absolute top-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-b-2 border-pink-700"></div>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-b-2 border-pink-700"></div>
+                <div className="absolute bottom-0 left-0 w-2 h-2 bg-pink-400 border-r-2 border-t-2 border-pink-700"></div>
+                <div className="absolute bottom-0 right-0 w-2 h-2 bg-pink-400 border-l-2 border-t-2 border-pink-700"></div>
               </div>
             ))
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-2">👥</div>
-              <p>No tienes solicitudes de amistad pendientes</p>
+            <div className="text-center py-8 text-pink-500 font-pixel">
+              <div className="text-5xl mb-2">👥</div>
+              <p className="font-bold">No tienes solicitudes de amistad pendientes</p>
             </div>
           )}
         </div>
@@ -237,43 +249,56 @@ export default function FriendRequests({ currentUserId = 1 }) {
         <div className="space-y-3">
           {outgoingRequests.length > 0 ? (
             outgoingRequests.map((request) => (
-              <div key={request.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
+              <div key={request.id} className="flex items-center justify-between p-4 bg-cyan-50 rounded-lg border-4 border-cyan-300 shadow-md relative overflow-hidden">
+                {/* Decorative border */}
+                <div className="absolute inset-0 border-2 border-cyan-200 rounded-lg m-1 pointer-events-none"></div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-yellow-400 rounded-full flex items-center justify-center text-white font-bold border-2 border-cyan-300 shadow">
                     {(request.recipientName || `Usuario ${request.recipientId}`).charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-bold text-cyan-900 text-lg">
                       {request.recipientName || `Usuario ${request.recipientId}`}
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-xs text-cyan-600 font-mono">
                       @{request.recipientUsername || `user${request.recipientId}`}
                     </div>
                     {request.sentAt && (
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs text-cyan-400">
                         Enviada {new Date(request.sentAt).toLocaleDateString()}
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="text-sm text-yellow-600 font-medium">
+                <div className="text-xs text-yellow-600 font-bold">
                   Pendiente
                 </div>
+                {/* Kawaii-style corner decorations */}
+                <div className="absolute top-0 left-0 w-2 h-2 bg-cyan-400 border-r-2 border-b-2 border-cyan-700"></div>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-cyan-400 border-l-2 border-b-2 border-cyan-700"></div>
+                <div className="absolute bottom-0 left-0 w-2 h-2 bg-cyan-400 border-r-2 border-t-2 border-cyan-700"></div>
+                <div className="absolute bottom-0 right-0 w-2 h-2 bg-cyan-400 border-l-2 border-t-2 border-cyan-700"></div>
               </div>
             ))
           ) : (
-            <div className="text-center py-8 text-gray-500">
-              <div className="text-4xl mb-2">📤</div>
-              <p>No has enviado solicitudes de amistad</p>
+            <div className="text-center py-8 text-cyan-500 font-pixel">
+              <div className="text-5xl mb-2">📤</div>
+              <p className="font-bold">No has enviado solicitudes de amistad</p>
             </div>
           )}
         </div>
       )}
 
       {/* Send Friend Request Form */}
-      <div className="mt-6 pt-4 border-t border-gray-200">
+      <div className="mt-6 pt-4 border-t-2 border-yellow-300">
         <SendFriendRequestForm onRequestSent={handleSendRequest} actionLoading={actionLoading} />
       </div>
+
+      {/* Kawaii-style corner decorations */}
+      <div className="absolute top-0 left-0 w-3 h-3 bg-yellow-500 border-r-4 border-b-4 border-yellow-900"></div>
+      <div className="absolute top-0 right-0 w-3 h-3 bg-yellow-500 border-l-4 border-b-4 border-yellow-900"></div>
+      <div className="absolute bottom-0 left-0 w-3 h-3 bg-yellow-500 border-r-4 border-t-4 border-yellow-900"></div>
+      <div className="absolute bottom-0 right-0 w-3 h-3 bg-yellow-500 border-l-4 border-t-4 border-yellow-900"></div>
     </div>
   );
 }
@@ -285,27 +310,28 @@ function SendFriendRequestForm({ onRequestSent, actionLoading }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!username.trim()) return;
-    
     onRequestSent(username.trim());
     setUsername('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <h3 className="text-lg font-semibold text-gray-900">Enviar Solicitud de Amistad</h3>
+    <form onSubmit={handleSubmit} className="space-y-3 font-pixel">
+      <h3 className="text-lg font-bold text-yellow-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+        <span>✨</span> Enviar Solicitud de Amistad
+      </h3>
       <div className="flex gap-2">
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Nombre de usuario (ej: Varto)"
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="flex-1 px-3 py-2 border-2 border-yellow-400 rounded-lg font-pixel text-yellow-700 bg-yellow-50 focus:ring-2 focus:ring-yellow-300 focus:border-yellow-500 placeholder-yellow-300"
           required
         />
         <button
           type="submit"
           disabled={!username.trim() || actionLoading[`send-${username}`]}
-          className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-pink-400 text-white font-bold rounded-lg border-2 border-pink-600 hover:bg-pink-500 transition-all shadow disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {actionLoading[`send-${username}`] ? (
             <div className="flex items-center gap-2">
