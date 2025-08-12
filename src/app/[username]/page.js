@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import DayView from '@/components/DayView';
-import DiaryEntry from "@/components/DiaryEntry";
 import Profile from "@/components/Profile";
-import FriendsSystem from "@/components/FriendsSystem";
+
 
 export default function UserProfilePage({ params }) {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -76,67 +74,14 @@ export default function UserProfilePage({ params }) {
       >
         <div className="max-w-6xl mx-auto py-8 px-4">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold text-gray-800">
-              @{username}
-            </h1>
           </div>
-          <p className="text-center text-gray-600 mb-8">
-            {isOwnProfile ? 'Tu Espacio Personal' : `Perfil de @${username}`}
-          </p>
           
-          {/* Tab Navigation */}
-          <div className="flex justify-center mb-8">
-            <div className="bg-white p-2 rounded-lg shadow-md">
-              <button
-                onClick={() => setActiveTab('diary')}
-                className={`px-6 py-3 rounded-md font-medium transition ${
-                  activeTab === 'diary'
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                }`}
-              >
-                📖 Diario
-              </button>
-              <button
-                onClick={() => setActiveTab('profile')}
-                className={`px-6 py-3 rounded-md font-medium transition ${
-                  activeTab === 'profile'
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                }`}
-              >
-                👤 Perfil
-              </button>
-            </div>
-          </div>
-
-          {/* Tab Content */}
-          <div className="w-full">
-            {activeTab === 'diary' && (
-              <div className="space-y-8">
-                {/* Diary View */}
-                <div className="flex justify-center">
-                  <DayView refreshTrigger={refreshTrigger} />
-                </div>
-                
-                {/* New Entry Form - Only show for authenticated user's own profile */}
-                {isOwnProfile && (
-                  <div className="flex justify-center">
-                    <DiaryEntry onEntryCreated={handleNewEntry} />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'profile' && (
-              <div className="flex justify-center">
-                <Profile 
-                  username={username} 
-                  onProfileUpdate={handleProfileUpdate}
-                />
-              </div>
-            )}
-
+          {/* Only Profile Content (no tabs) */}
+          <div className="w-full flex justify-center">
+            <Profile 
+              username={username} 
+              onProfileUpdate={handleProfileUpdate}
+            />
           </div>
         </div>
       </div>

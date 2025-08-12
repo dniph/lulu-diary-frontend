@@ -19,7 +19,7 @@ export default function DiaryPage() {
             <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('/images/ATARDECER.jpg')",
+          backgroundImage: "url('/images/CIELO PIXEL ART.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
