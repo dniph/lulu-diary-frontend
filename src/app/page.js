@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import DiaryHomeButton from '@/components/DiaryHomeButton';
+import Feed from '@/components/Feed';
 
 export default function Home() {
   const [currentTime, setCurrentTime] = useState('');
@@ -125,6 +126,10 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+        {/* Feed below the main card */}
+        <div className="max-w-2xl mx-auto w-full px-4">
+          <Feed />
         </div>
       </div>
     </div>
