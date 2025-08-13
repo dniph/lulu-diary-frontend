@@ -396,7 +396,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
           <div className="bg-green-200 rounded-lg border-4 border-green-500 p-4 relative overflow-hidden">
             <div className="bg-green-400 p-2 border-b-4 border-green-500 mb-4 relative -mx-4 -mt-4">
               <h3 className="text-white text-sm font-bold uppercase tracking-wider text-center">
-                💕 PERSONAL INFO 💕
+                💕 USER INFORMATION 💕
               </h3>
               <div className="absolute top-1 left-2 w-2 h-2 bg-yellow-400"></div>
               <div className="absolute top-1 right-2 w-2 h-2 bg-yellow-400"></div>
@@ -410,29 +410,18 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
                   👤 NAME:
                 </span>
                 <p className="text-green-800 font-pixel pl-4">
-                  {profile.name || '✨ NOT SPECIFIED YET ✨'}
+                  {profile.displayName || profile.name || '✨ NOT SPECIFIED YET ✨'}
                 </p>
               </div>
               
-              {/* Email */}
+              {/* Username */}
               <div className="bg-cyan-100 p-3 rounded border-2 border-green-600 relative">
                 <div className="absolute top-1 right-1 text-green-500">�</div>
                 <span className="font-bold text-green-700 uppercase tracking-wide block mb-1">
-                  � EMAIL:
+                  🏷️ USERNAME:
                 </span>
                 <p className="text-green-800 font-pixel pl-4">
-                  {profile.email || '✨ NOT SPECIFIED YET ✨'}
-                </p>
-              </div>
-              
-              {/* Bio */}
-              <div className="bg-cyan-100 p-3 rounded border-2 border-green-600 relative">
-                <div className="absolute top-1 right-1 text-green-500">📝</div>
-                <span className="font-bold text-green-700 uppercase tracking-wide block mb-1">
-                  💭 BIO:
-                </span>
-                <p className="text-green-800 font-pixel pl-4 leading-relaxed">
-                  {profile.bio || '✨ NO KAWAII STORY YET... WRITE SOMETHING CUTE! ✨'}
+                  @{profile.username}
                 </p>
               </div>
               
