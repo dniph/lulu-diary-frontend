@@ -235,7 +235,16 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
               <div className="text-center relative z-10">
                 <div className="inline-block mb-4">
                   <div className="w-24 h-24 rounded border-4 border-pink-900 mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg relative overflow-hidden">
-                    {profile.username === currentUserProfile?.username && profile.profilePicture ? (
+                    {profile.avatarUrl ? (
+                      <Image 
+                        src={profile.avatarUrl} 
+                        alt={profile.displayName || profile.username}
+                        width={96}
+                        height={96}
+                        className="w-full h-full object-cover"
+                        unoptimized={!profile.avatarUrl.includes('stardewvalleywiki.com')}
+                      />
+                    ) : profile.profilePicture ? (
                       <Image 
                         src={profile.profilePicture} 
                         alt="Profile Picture" 
@@ -253,7 +262,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-yellow-400 via-pink-400 to-purple-400 flex items-center justify-center">
-                        {profile.name ? profile.name.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
+                        {profile.displayName ? profile.displayName.charAt(0).toUpperCase() : profile.username.charAt(0).toUpperCase()}
                       </div>
                     )}
                     {/* Kawaii sparkles around avatar */}
@@ -265,8 +274,15 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
                 {/* Username with kawaii styling */}
                 <div className="bg-pink-700 text-white px-4 py-2 rounded border-2 border-pink-800 inline-block">
                   <h2 className="text-lg font-bold uppercase tracking-wide">
-                    @{profile.username}
+                    {profile.displayName ? (
+                      <span>{profile.displayName}</span>
+                    ) : (
+                      <span>@{profile.username}</span>
+                    )}
                   </h2>
+                  {profile.displayName && (
+                    <div className="text-xs text-pink-200 mt-1">@{profile.username}</div>
+                  )}
                 </div>
               </div>
               
