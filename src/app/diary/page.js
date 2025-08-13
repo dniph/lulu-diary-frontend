@@ -15,17 +15,10 @@ export default function DiaryPage() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden font-kawaii">
-            <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/images/CIELO PIXEL ART.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      ></div>
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat relative font-pixel bg-fixed" style={{backgroundImage: "url('/images/CIELO PIXEL ART.png')"}}>
       <DayView refreshTrigger={refreshTrigger} />
       <DiaryEntry onEntryCreated={handleNewEntry} />
     </div>
   );
 }
+

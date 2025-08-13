@@ -65,7 +65,7 @@ export default function UserProfilePage({ params }) {
 
   return (
     <div className="min-h-screen relative overflow-hidden font-kawaii">
-      <div className="min-h-screen bg-cover bg-center bg-no-repeat relative font-pixel" style={{backgroundImage: "url('/images/CIELO PIXEL ART.png')"}}>
+      <div className="min-h-screen bg-cover bg-center bg-no-repeat relative font-pixel bg-fixed" style={{backgroundImage: "url('/images/CIELO PIXEL ART.png')"}}>
         <div className="max-w-6xl mx-auto py-8 px-4">
           <div className="flex items-center justify-between mb-6">
           </div>

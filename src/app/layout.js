@@ -1,13 +1,14 @@
 import './globals.css';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import SignOut from '../components/SignOut';
 import ProfileLink from '../components/ProfileLink';
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
 
 export default async function RootLayout({ children }) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('better-auth.session_token');
-  const isLoggedIn = !!token;
+  const headersList = await headers();
+  const session = await auth.api.getSession({ headers: headersList});
+  const isLoggedIn = !!session;
   return (
     <html lang="es">
       <head>
@@ -19,11 +20,11 @@ export default async function RootLayout({ children }) {
       <body>
         <nav className="bg-indigo-600 text-white p-4 flex space-x-4 font-pixel">
           <Link href="/" className="hover:underline">Home</Link>
-          <ProfileLink />
-          <Link href="/diary" className="hover:underline">Diary</Link>
-          <Link href="/friends" className="hover:underline">Friends</Link>
           {isLoggedIn ? (
             <>
+              <ProfileLink />
+              <Link href="/diary" className="hover:underline">Diary</Link>
+              <Link href="/friends" className="hover:underline">Friends</Link>
               <SignOut />
             </>
           ) : (
