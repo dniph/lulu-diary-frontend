@@ -10,9 +10,8 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    bio: '',
+    displayName: '',
+    username: '',
   });
 
   // Fetch current user profile using Me API
@@ -28,9 +27,8 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
           if (useMe || !username || username === currentUser.username) {
             setProfile(currentUser);
             setFormData({
-              name: currentUser.name || '',
-              email: currentUser.email || '',
-              bio: currentUser.bio || '',
+              displayName: currentUser.displayName || '',
+              username: currentUser.username || '',
             });
             setLoading(false);
             return;
@@ -55,9 +53,8 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
         const data = await res.json();
         setProfile(data);
         setFormData({
-          name: data.name || '',
-          email: data.email || '',
-          bio: data.bio || '',
+          displayName: data.displayName || '',
+          username: data.username || '',
         });
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -147,9 +144,8 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
   const cancelEdit = () => {
     setEditing(false);
     setFormData({
-      name: profile.name || '',
-      email: profile.email || '',
-      bio: profile.bio || '',
+      displayName: profile.displayName || '',
+      username: profile.username || '',
     });
   };
 
@@ -299,7 +295,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
           {/* Edit Mode Header */}
           <div className="bg-orange-400 p-3 border-b-4 border-orange-500 mb-6 relative -mx-6 -mt-6">
             <h3 className="text-white text-lg font-bold uppercase tracking-wider text-center">
-              ✏️ EDIT INTERFACE ✏️
+              ✏️ EDIT PROFILE ✏️
             </h3>
             {/* Decorative elements */}
             <div className="absolute top-1 left-2 w-2 h-2 bg-yellow-400"></div>
@@ -310,13 +306,13 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
             {/* Name Input - Kawaii Style */}
             <div className="relative">
               <label className="block text-orange-700 text-sm font-bold mb-2 uppercase tracking-wide">
-                � NAME
+                🌸 NAME
               </label>
               <div className="bg-orange-50 border-4 border-orange-400 rounded p-1">
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="displayName"
+                  value={formData.displayName}
                   onChange={handleChange}
                   className="w-full p-3 bg-white border-2 border-orange-300 rounded text-orange-800 font-pixel text-xs placeholder-orange-400 focus:border-orange-500 focus:outline-none"
                   placeholder="Your kawaii name..."
@@ -324,36 +320,19 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
               </div>
             </div>
 
-            {/* Email Input - Kawaii Style */}
+            {/* Username Input - Kawaii Style */}
             <div className="relative">
               <label className="block text-orange-700 text-sm font-bold mb-2 uppercase tracking-wide">
-                � EMAIL
+                🏷️ USERNAME
               </label>
               <div className="bg-orange-50 border-4 border-orange-400 rounded p-1">
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                  type="text"
+                  name="username"
+                  value={formData.username}
                   onChange={handleChange}
                   className="w-full p-3 bg-white border-2 border-orange-300 rounded text-orange-800 font-pixel text-xs placeholder-orange-400 focus:border-orange-500 focus:outline-none"
-                  placeholder="your@kawaii.email..."
-                />
-              </div>
-            </div>
-
-            {/* Bio Textarea - Kawaii Style */}
-            <div className="relative">
-              <label className="block text-orange-700 text-sm font-bold mb-2 uppercase tracking-wide">
-                📝 BIO
-              </label>
-              <div className="bg-orange-50 border-4 border-orange-400 rounded p-1">
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleChange}
-                  rows="5"
-                  className="w-full p-3 bg-white border-2 border-orange-300 rounded text-orange-800 font-pixel text-xs placeholder-orange-400 resize-none focus:border-orange-500 focus:outline-none"
-                  placeholder="Tell your kawaii story..."
+                  placeholder="YourKawaiiUsername"
                 />
               </div>
             </div>
