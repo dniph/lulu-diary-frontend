@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Feed() {
   const [feed, setFeed] = useState([]);
@@ -60,23 +61,31 @@ export default function Feed() {
           <div key={diary.id} className="bg-white/80 rounded-lg border-4 border-pink-300 shadow-lg p-4 font-pixel relative overflow-hidden">
             <div className="flex items-center gap-3 mb-2">
               {profile.avatarUrl ? (
-                <div className="w-10 h-10 rounded-full border-2 border-pink-300 shadow overflow-hidden">
-                  <Image 
-                    src={profile.avatarUrl} 
-                    alt={profile.displayName || profile.username} 
-                    width={40} 
-                    height={40} 
-                    className="object-cover w-full h-full"
-                    unoptimized={!profile.avatarUrl.includes('stardewvalleywiki.com')}
-                  />
-                </div>
+                <Link href={`/${profile.username}`} className="hover:opacity-90 transition-opacity">
+                  <div className="w-10 h-10 rounded-full border-2 border-pink-300 shadow overflow-hidden">
+                    <Image 
+                      src={profile.avatarUrl} 
+                      alt={profile.displayName || profile.username} 
+                      width={40} 
+                      height={40} 
+                      className="object-cover w-full h-full"
+                      unoptimized={!profile.avatarUrl.includes('stardewvalleywiki.com')}
+                    />
+                  </div>
+                </Link>
               ) : (
-                <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-lg font-bold border-2 border-pink-300 shadow">
-                  {profile.displayName ? profile.displayName.charAt(0).toUpperCase() : (profile.username ? profile.username.charAt(0).toUpperCase() : "👤")}
-                </div>
+                <Link href={`/${profile.username}`} className="hover:opacity-90 transition-opacity">
+                  <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-lg font-bold border-2 border-pink-300 shadow">
+                    {profile.displayName ? profile.displayName.charAt(0).toUpperCase() : (profile.username ? profile.username.charAt(0).toUpperCase() : "👤")}
+                  </div>
+                </Link>
               )}
               <div>
-                <div className="font-bold text-pink-800">{profile.displayName || `@${profile.username}`}</div>
+                <Link href={`/${profile.username}`} className="group">
+                  <div className="font-bold text-pink-800 group-hover:text-purple-600 group-hover:underline transition-colors cursor-pointer">
+                    {profile.displayName || `@${profile.username}`}
+                  </div>
+                </Link>
                 <div className="text-xs text-cyan-600 font-mono">@{profile.username}</div>
               </div>
               <div className="ml-auto text-xs text-pink-400 font-mono">
