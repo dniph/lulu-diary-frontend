@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function FriendsList({ username, currentUserId = 1, isOwnProfile = false }) {
   const [friends, setFriends] = useState([]);
@@ -36,8 +37,8 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
 
   // Filter friends based on search term
   const filteredFriends = friends.filter(friend => {
-    const name = friend.friendName || friend.name || `User ${friend.friendId || friend.id}`;
-    const friendUsername = friend.friendUsername || friend.username || `user${friend.friendId || friend.id}`;
+    const name = friend.displayName || friend.friendName || friend.name || `User ${friend.friendId || friend.id}`;
+    const friendUsername = friend.username || friend.friendUsername || `user${friend.friendId || friend.id}`;
     return name.toLowerCase().includes(searchTerm.toLowerCase()) ||
            friendUsername.toLowerCase().includes(searchTerm.toLowerCase());
   });
@@ -59,10 +60,10 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
       <div className="absolute inset-0 border-4 border-pink-300 rounded-lg m-2 pointer-events-none"></div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-pink-800 uppercase tracking-wider flex items-center gap-2">
-          <span>👾</span> {isOwnProfile ? 'Mis Amigos' : `Amigos de @${username}`}
+          <span>👾</span> {isOwnProfile ? 'My Friends' : `${username}'s Friends`}
         </h2>
         <div className="text-sm text-pink-500 font-bold">
-          {friends.length} {friends.length === 1 ? 'amigo' : 'amigos'}
+          {friends.length} {friends.length === 1 ? 'friend' : 'friends'}
         </div>
       </div>
 
@@ -81,19 +82,44 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
 
       {/* Friends Grid */}
       {filteredFriends.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredFriends.map((friend) => {
-            const friendName = friend.friendName || friend.name || `Usuario ${friend.friendId || friend.id}`;
-            const friendUsername = friend.friendUsername || friend.username || `user${friend.friendId || friend.id}`;
-            const friendId = friend.friendId || friend.id;
+            const friendName = friend.displayName || friend.friendName || friend.name || `Usuario ${friend.friendId || friend.id}`;
+            const friendUsername = friend.username || friend.friendUsername || `user${friend.friendId || friend.id}`;
+            const friendId = friend.friendId || friend.id || friend.username;
+            const avatarUrl = friend.avatarUrl;
+            const diaryVisibility = friend.diaryVisibility;
+            
             return (
               <div key={friendId} className="p-4 bg-cyan-50 rounded-lg border-4 border-cyan-300 shadow-md hover:bg-cyan-100 transition-colors relative overflow-hidden">
                 {/* Decorative border */}
                 <div className="absolute inset-0 border-2 border-cyan-200 rounded-lg m-1 pointer-events-none"></div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-xl font-bold border-2 border-pink-300 shadow">
-                    {friendName.charAt(0).toUpperCase()}
-                  </div>
+                  {avatarUrl ? (
+                    <div className="w-12 h-12 rounded-full border-2 border-pink-300 shadow overflow-hidden relative">
+                      {avatarUrl.startsWith('https://stardewvalleywiki.com') ? (
+                        <Image 
+                          src={avatarUrl}
+                          alt={`${friendName}'s avatar`}
+                          fill
+                          sizes="48px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        // Fallback for non-configured domains
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img 
+                          src={avatarUrl}
+                          alt={`${friendName}'s avatar`}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-xl font-bold border-2 border-pink-300 shadow">
+                      {friendName.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div className="flex-1">
                     <div className="font-bold text-cyan-900 text-lg">{friendName}</div>
                     <div className="text-xs text-cyan-600 font-mono">@{friendUsername}</div>
@@ -102,7 +128,14 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
                 {/* Friend since date */}
                 {friend.friendSince && (
                   <div className="text-xs text-cyan-500 mb-3 font-mono">
-                    Amigos desde {new Date(friend.friendSince).toLocaleDateString()}
+                    Friends since {new Date(friend.friendSince).toLocaleDateString()}
+                  </div>
+                )}
+                {/* Diary visibility indicator */}
+                {diaryVisibility && (
+                  <div className="text-xs text-cyan-500 mb-3 font-mono flex items-center gap-1">
+                    <span>{diaryVisibility === "public" ? "🌍" : diaryVisibility === "friends-only" ? "👥" : "🔒"}</span>
+                    <span>Diary: {diaryVisibility}</span>
                   </div>
                 )}
                 {/* Action buttons */}
@@ -111,19 +144,19 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
                     onClick={() => window.location.href = `/${friendUsername}`}
                     className="flex-1 px-3 py-1.5 bg-pink-400 text-white text-xs font-bold rounded-lg border-2 border-pink-600 hover:bg-pink-500 transition-all shadow"
                   >
-                    Ver Perfil
+                    View Profile
                   </button>
                   <button 
                     onClick={() => window.location.href = `/${friendUsername}`}
                     className="flex-1 px-3 py-1.5 bg-cyan-400 text-white text-xs font-bold rounded-lg border-2 border-cyan-600 hover:bg-cyan-500 transition-all shadow"
                   >
-                    Ver Diario
+                    View Diary
                   </button>
                 </div>
                 {/* Mutual friends indicator (if available) */}
                 {friend.mutualFriendsCount && friend.mutualFriendsCount > 0 && (
                   <div className="mt-2 text-xs text-pink-500 text-center font-mono">
-                    {friend.mutualFriendsCount} amigo{friend.mutualFriendsCount !== 1 ? 's' : ''} en común
+                    {friend.mutualFriendsCount} mutual friend{friend.mutualFriendsCount !== 1 ? 's' : ''}
                   </div>
                 )}
                 {/* Kawaii-style corner decorations */}
@@ -141,7 +174,7 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
             // No search results
             <div className="text-pink-500 font-pixel">
               <div className="text-5xl mb-2">🔍</div>
-              <p className="font-bold">No se encontraron amigos con &ldquo;{searchTerm}&rdquo;</p>
+              <p className="font-bold">No friends found matching &ldquo;{searchTerm}&rdquo;</p>
               <button
                 onClick={() => setSearchTerm('')}
                 className="mt-2 text-cyan-600 hover:text-cyan-800 text-sm font-bold underline"
@@ -175,11 +208,11 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
           <div className="text-xs text-pink-600 font-bold">
             {searchTerm && filteredFriends.length !== friends.length ? (
               <span>
-                Mostrando {filteredFriends.length} de {friends.length} amigos
+                Showing {filteredFriends.length} of {friends.length} friends
               </span>
             ) : (
               <span>
-                Total: {friends.length} {friends.length === 1 ? 'amigo' : 'amigos'}
+                Total: {friends.length} {friends.length === 1 ? 'friend' : 'friends'}
               </span>
             )}
           </div>
