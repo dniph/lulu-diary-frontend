@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export default function FriendRequests({ currentUserId = 1 }) {
   const [incomingRequests, setIncomingRequests] = useState([]);
@@ -9,44 +9,50 @@ export default function FriendRequests({ currentUserId = 1 }) {
   const [actionLoading, setActionLoading] = useState({});
   const [activeTab, setActiveTab] = useState('incoming');
 
+  const fetchOutgoingRequests = useCallback(async () => {
+    try {
+      const outgoingRes = await fetch('/api/lulu-diary/friend-requests/outgoing', {
+        headers: {
+          'X-Current-User-Id': currentUserId.toString(),
+          'Content-Type': 'application/json'
+        }
+      });
+      if (outgoingRes.ok) {
+        const outgoingData = await outgoingRes.json();
+        setOutgoingRequests(outgoingData);
+      }
+    } catch (error) {
+      console.error('Error fetching outgoing requests:', error);
+    }
+  }, [currentUserId]);
+
+  const fetchIncomingRequests = useCallback(async () => {
+    try {
+      const incomingRes = await fetch('/api/lulu-diary/friend-requests/incoming', {
+        headers: {
+          'X-Current-User-Id': currentUserId.toString(),
+          'Content-Type': 'application/json'
+        }
+      });
+      if (incomingRes.ok) {
+        const incomingData = await incomingRes.json();
+        setIncomingRequests(incomingData);
+      }
+    } catch (error) {
+      console.error('Error fetching incoming requests:', error);
+    }
+  }, [currentUserId]);
+
   // Load friend requests on component mount
   useEffect(() => {
-    const fetchRequests = async () => {
-      try {
+    const fetchAllRequests = async () => {
         setLoading(true);
-        
-        // Fetch incoming requests
-        const incomingRes = await fetch('/api/lulu-diary/friend-requests/incoming', {
-          headers: {
-            'X-Current-User-Id': currentUserId.toString(),
-            'Content-Type': 'application/json'
-          }
-        });
-        if (incomingRes.ok) {
-          const incomingData = await incomingRes.json();
-          setIncomingRequests(incomingData);
-        }
-        
-        // Fetch outgoing requests
-        const outgoingRes = await fetch('/api/lulu-diary/friend-requests/outgoing', {
-          headers: {
-            'X-Current-User-Id': currentUserId.toString(),
-            'Content-Type': 'application/json'
-          }
-        });
-        if (outgoingRes.ok) {
-          const outgoingData = await outgoingRes.json();
-          setOutgoingRequests(outgoingData);
-        }
-      } catch (error) {
-        console.error('Error fetching friend requests:', error);
-      } finally {
+        await Promise.all([fetchIncomingRequests(), fetchOutgoingRequests()]);
         setLoading(false);
-      }
-    };
+    }
 
-    fetchRequests();
-  }, [currentUserId]);
+    fetchAllRequests();
+  }, [currentUserId, fetchOutgoingRequests, fetchIncomingRequests]);
 
   // Handle sending a friend request
   const handleSendRequest = async (username) => {
@@ -63,13 +69,12 @@ export default function FriendRequests({ currentUserId = 1 }) {
         body: JSON.stringify({ requestedUsername: username }),
       });
 
-      if (!res.ok) throw new Error('Error al enviar solicitud de amistad');
+      if (!res.ok) throw new Error('Error sending friend request');
       
-      const newRequest = await res.json();
-      setOutgoingRequests(prev => [...prev, newRequest]);
+      await fetchOutgoingRequests();
     } catch (error) {
       console.error('Error sending friend request:', error);
-      alert('Error al enviar la solicitud de amistad.');
+      alert('Error sending the friend request.');
     } finally {
       setActionLoading(prev => ({ ...prev, [`send-${username}`]: false }));
     }
@@ -89,13 +94,16 @@ export default function FriendRequests({ currentUserId = 1 }) {
         },
       });
 
-      if (!res.ok) throw new Error('Error al aceptar solicitud de amistad');
+      if (!res.ok) throw new Error('Error accepting friend request');
       
       // Remove from incoming requests
       setIncomingRequests(prev => prev.filter(req => req.id !== requestId));
+      
+      // Refresh the incoming requests list
+      await fetchIncomingRequests();
     } catch (error) {
       console.error('Error accepting friend request:', error);
-      alert('Error al aceptar la solicitud de amistad.');
+      alert('Error accepting the friend request.');
     } finally {
       setActionLoading(prev => ({ ...prev, [`accept-${requestId}`]: false }));
     }
@@ -115,13 +123,16 @@ export default function FriendRequests({ currentUserId = 1 }) {
         },
       });
 
-      if (!res.ok) throw new Error('Error al rechazar solicitud de amistad');
+      if (!res.ok) throw new Error('Error rejecting friend request');
       
       // Remove from incoming requests
       setIncomingRequests(prev => prev.filter(req => req.id !== requestId));
+      
+      // Refresh the incoming requests list
+      await fetchIncomingRequests();
     } catch (error) {
       console.error('Error rejecting friend request:', error);
-      alert('Error al rechazar la solicitud de amistad.');
+      alert('Error rejecting the friend request.');
     } finally {
       setActionLoading(prev => ({ ...prev, [`reject-${requestId}`]: false }));
     }
