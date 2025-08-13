@@ -24,7 +24,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
     const fetchCommentsCount = async () => {
       try {
         const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`);
-        if (!res.ok) throw new Error('Error al obtener comentarios');
+        if (!res.ok) throw new Error('Error getting comments');
         const data = await res.json();
         setCommentsCount(data.length);
       } catch (error) {
@@ -42,7 +42,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
       try {
         setLoading(true);
         const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`);
-        if (!res.ok) throw new Error('Error al obtener comentarios');
+        if (!res.ok) throw new Error('Error getting comments');
         const data = await res.json();
         setComments(data);
         setCommentsCount(data.length); // Update count when loading full comments
@@ -75,11 +75,11 @@ export default function Comments({ username, diaryId, currentUser = null, curren
         body: JSON.stringify({
           content: newComment.trim(),
           // TODO: Get author from authenticated user
-          author: currentUser || 'usuario_anonimo'
+          author: currentUser || 'anonymous_user'
         }),
       });
 
-      if (!res.ok) throw new Error('Error al enviar comentario');
+      if (!res.ok) throw new Error('Error sending comment');
       
       const savedComment = await res.json();
       setComments(prev => [...prev, savedComment]);
@@ -87,14 +87,14 @@ export default function Comments({ username, diaryId, currentUser = null, curren
       setNewComment('');
     } catch (error) {
       console.error('Error posting comment:', error);
-      alert('Error al enviar el comentario. ¿Estás autenticado?');
+      alert('Error sending comment. Are you authenticated?');
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDeleteComment = async (commentId) => {
-    const confirmDelete = window.confirm('¿Eliminar este comentario?');
+    const confirmDelete = window.confirm('Delete this comment?');
     if (!confirmDelete) return;
 
     try {
@@ -106,7 +106,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
         },
       });
 
-      if (!res.ok) throw new Error('Error al eliminar comentario');
+      if (!res.ok) throw new Error('Error deleting comment');
       
       setComments(prev => prev.filter(comment => comment.id !== commentId));
       setCommentsCount(prev => prev - 1); // Update count
@@ -119,7 +119,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
   const formatDate = (dateString) => {
   if (!dateString) return 'Date not available';
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -202,7 +202,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-gray-900 text-sm">
-                            {comment.author || 'Usuario anónimo'}
+                            {comment.author || 'Anonymous user'}
                           </span>
                           <span className="text-xs text-gray-500">
                             {formatDate(comment.createdAt)}
@@ -213,7 +213,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
                             className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                            title="Eliminar comentario"
+                            title="Delete comment"
                           >
                             <span className="text-sm">🗑️</span>
                           </button>
@@ -224,7 +224,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
                       </p>
                       {comment.updatedAt && comment.updatedAt !== comment.createdAt && (
                         <p className="text-xs text-gray-400 mt-1 italic">
-                          Editado el {formatDate(comment.updatedAt)}
+                          Edited on {formatDate(comment.updatedAt)}
                         </p>
                       )}
                       

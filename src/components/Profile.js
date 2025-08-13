@@ -49,7 +49,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
     async function fetchSpecificProfile() {
       try {
         const res = await fetch(`/api/lulu-diary/profiles/${username}`);
-        if (!res.ok) throw new Error('Error al obtener el perfil');
+        if (!res.ok) throw new Error('Error getting profile');
         const data = await res.json();
         setProfile(data);
         setFormData({
@@ -120,7 +120,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
         });
       }
 
-      if (!res.ok) throw new Error('Error al actualizar el perfil');
+      if (!res.ok) throw new Error('Error updating profile');
 
       const updatedProfile = await res.json();
       setProfile(updatedProfile);
@@ -139,7 +139,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
       window.location.href = '/' + updatedProfile.username;
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Error al actualizar el perfil.');
+      alert('Error updating profile.');
     }
   };
 
@@ -413,7 +413,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
                   🌟 MEMBER SINCE:
                 </span>
                 <p className="text-green-800 font-pixel pl-4">
-                  {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('es-ES', {
+                  {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'

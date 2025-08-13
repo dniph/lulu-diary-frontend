@@ -10,12 +10,12 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
 
   // Available reaction types with emojis
   const reactionTypes = [
-    { type: 'like', emoji: '👍', label: 'Me gusta' },
-    { type: 'love', emoji: '❤️', label: 'Me encanta' },
-    { type: 'laugh', emoji: '😄', label: 'Divertido' },
-    { type: 'sad', emoji: '😢', label: 'Triste' },
-    { type: 'angry', emoji: '😠', label: 'Enojado' },
-    { type: 'surprised', emoji: '😮', label: 'Sorprendido' }
+    { type: 'like', emoji: '👍', label: 'Like' },
+    { type: 'love', emoji: '❤️', label: 'Love' },
+    { type: 'laugh', emoji: '😄', label: 'Funny' },
+    { type: 'sad', emoji: '😢', label: 'Sad' },
+    { type: 'angry', emoji: '😠', label: 'Angry' },
+    { type: 'surprised', emoji: '😮', label: 'Surprised' }
   ];
 
   // Reset reactions when diaryId changes
@@ -31,7 +31,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
       try {
         setLoading(true);
         const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/reactions`);
-        if (!res.ok) throw new Error('Error al obtener reacciones');
+        if (!res.ok) throw new Error('Error getting reactions');
         const data = await res.json();
         
         setReactions(data);
@@ -69,7 +69,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
         }),
       });
 
-      if (!res.ok) throw new Error('Error al reaccionar');
+      if (!res.ok) throw new Error('Error adding reaction');
       
       const newReaction = await res.json();
       
@@ -84,7 +84,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
       setUserReaction(reactionType);
     } catch (error) {
       console.error('Error adding reaction:', error);
-      alert('Error al reaccionar.');
+      alert('Error adding reaction.');
     } finally {
       setReacting(false);
     }
@@ -105,14 +105,14 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
         }
       });
 
-      if (!res.ok) throw new Error('Error al quitar reacción');
+      if (!res.ok) throw new Error('Error removing reaction');
       
       // Update reactions list - remove user's reaction
       setReactions(prev => prev.filter(r => r.profileId !== currentUserId));
       setUserReaction(null);
     } catch (error) {
       console.error('Error removing reaction:', error);
-      alert('Error al quitar la reacción.');
+      alert('Error removing reaction.');
     } finally {
       setReacting(false);
     }

@@ -15,9 +15,9 @@ export default function Feed() {
         setLoading(true);
         setError(null);
         const res = await fetch("/api/lulu-diary/feed?limit=20");
-        if (!res.ok) throw new Error("Error al cargar el feed");
+        if (!res.ok) throw new Error("Error loading feed");
         const data = await res.json();
-        // Adaptar al esquema: { data: [...] }
+        // Adapt to schema: { data: [...] }
         setFeed(Array.isArray(data) ? data : (data.data || []));
       } catch (err) {
         setError(err.message);
@@ -33,7 +33,7 @@ export default function Feed() {
     return (
       <div className="flex items-center justify-center py-8 font-pixel">
         <span className="animate-spin rounded-full h-8 w-8 border-b-4 border-pink-500 mr-2"></span>
-        <span className="text-pink-700 font-bold text-lg">Cargando feed...</span>
+        <span className="text-pink-700 font-bold text-lg">Loading feed...</span>
       </div>
     );
   }
