@@ -104,7 +104,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
 
       if (isOwnProfile) {
         // Use Me API for current user's profile
-        res = await fetch(`/api/lulu-diary/me`, {
+        res = await fetch(`/api/lulu-diary/profiles/${currentUserProfile.username}`, {
           method: 'PATCH',
           credentials: 'include',
           headers,
@@ -135,6 +135,8 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
       if (onProfileUpdate) {
         onProfileUpdate(updatedProfile);
       }
+
+      window.location.href = '/' + updatedProfile.username;
     } catch (error) {
       console.error('Error updating profile:', error);
       alert('Error al actualizar el perfil.');
