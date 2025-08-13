@@ -187,7 +187,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
         <div className="bg-purple-500 p-4 border-b-4 border-purple-600 relative">
           <div className="text-center relative z-10">
             <h2 className="text-white text-xl font-bold uppercase tracking-widest mb-2">
-              � PROFILE VIEWER �
+              PROFILE VIEWER
             </h2>
             <div className="flex justify-center items-center gap-2">
               <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>

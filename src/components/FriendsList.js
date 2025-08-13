@@ -142,12 +142,6 @@ export default function FriendsList({ username, currentUserId = 1, isOwnProfile 
                 <div className="flex gap-2">
                   <button 
                     onClick={() => window.location.href = `/${friendUsername}`}
-                    className="flex-1 px-3 py-1.5 bg-pink-400 text-white text-xs font-bold rounded-lg border-2 border-pink-600 hover:bg-pink-500 transition-all shadow"
-                  >
-                    View Profile
-                  </button>
-                  <button 
-                    onClick={() => window.location.href = `/${friendUsername}`}
                     className="flex-1 px-3 py-1.5 bg-cyan-400 text-white text-xs font-bold rounded-lg border-2 border-cyan-600 hover:bg-cyan-500 transition-all shadow"
                   >
                     View Diary
