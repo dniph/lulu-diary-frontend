@@ -262,7 +262,7 @@ export default function UserDiaryEntries({ username }) {
             <Comments 
               username={username} 
               diaryId={entry.id} 
-              currentUserId={currentUser?.id}
+              currentUser={currentUser}
             />
           </div>
         </div>

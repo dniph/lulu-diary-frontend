@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import FollowSystem from './FollowSystem';
 
-export default function Profile({ username = null, onProfileUpdate, currentUserId = null, useMe = false }) {
+export default function Profile({ username = null, onProfileUpdate, useMe = false, currentProfileId = null }) {
   const [profile, setProfile] = useState(null);
   const [currentUserProfile, setCurrentUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -397,7 +397,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
               
               {/* Username */}
               <div className="bg-cyan-100 p-3 rounded border-2 border-green-600 relative">
-                <div className="absolute top-1 right-1 text-green-500">�</div>
+                <div className="absolute top-1 right-1 text-green-500"></div>
                 <span className="font-bold text-green-700 uppercase tracking-wide block mb-1">
                   🏷️ USERNAME:
                 </span>
@@ -447,7 +447,7 @@ export default function Profile({ username = null, onProfileUpdate, currentUserI
       {/* Follow System Component */}
       <FollowSystem 
         username={profile.username} 
-        currentUserId={currentUserId} 
+        currentProfileId={currentProfileId} 
         isOwnProfile={isOwnProfile} 
       />
     </div>

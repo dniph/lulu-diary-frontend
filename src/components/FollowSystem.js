@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export default function FollowSystem({ username, currentUserId = 1, isOwnProfile = false }) {
+export default function FollowSystem({ username, currentProfileId, isOwnProfile = false }) {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -24,8 +24,8 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
           setFollowers(followersData);
           
           // Check if current user is following this profile
-          if (!isOwnProfile && currentUserId) {
-            const isCurrentUserFollowing = followersData.some(follower => follower.followerId === currentUserId);
+          if (!isOwnProfile && currentProfileId) {
+            const isCurrentUserFollowing = followersData.some(follower => follower.followerId === currentProfileId);
             setIsFollowing(isCurrentUserFollowing);
           }
         }
@@ -44,7 +44,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
     };
 
     fetchFollowData();
-  }, [username, currentUserId, isOwnProfile]);
+  }, [username, currentProfileId, isOwnProfile]);
 
   // Handle follow action
   const handleFollow = async () => {
@@ -63,8 +63,8 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
       
       // Add current user to followers list
       const newFollower = {
-        followerId: currentUserId,
-        followerName: `Usuario ${currentUserId}`, // This would come from user context in real app
+        followerId: currentProfileId,
+        followerName: `Usuario ${currentProfileId}`, // This would come from user context in real app
         followedAt: new Date().toISOString()
       };
       
@@ -94,7 +94,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
       if (!res.ok) throw new Error('Error al dejar de seguir el perfil');
       
       // Remove current user from followers list
-      setFollowers(prev => prev.filter(follower => follower.followerId !== currentUserId));
+      setFollowers(prev => prev.filter(follower => follower.followerId !== currentProfileId));
       setIsFollowing(false);
     } catch (error) {
       console.error('Error unfollowing profile:', error);
@@ -118,25 +118,18 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
       {/* Follow Stats */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-6">
-          <button
-            onClick={() => setShowFollowers(!showFollowers)}
-            className="text-center hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
-          >
+          <div className="text-center px-3 py-2 rounded-lg transition-colors">
             <div className="text-xl font-bold text-gray-900">{followers.length}</div>
             <div className="text-sm text-gray-600">Followers</div>
-          </button>
-          
-          <button
-            onClick={() => setShowFollowing(!showFollowing)}
-            className="text-center hover:bg-gray-50 px-3 py-2 rounded-lg transition-colors"
-          >
+          </div>
+          <div className="text-center px-3 py-2 rounded-lg transition-colors">
             <div className="text-xl font-bold text-gray-900">{following.length}</div>
             <div className="text-sm text-gray-600">Following</div>
-          </button>
+          </div>
         </div>
 
         {/* Follow/Unfollow Button */}
-        {!isOwnProfile && (
+        {!isOwnProfile && currentProfileId && (
           <button
             onClick={isFollowing ? handleUnfollow : handleFollow}
             disabled={actionLoading}
@@ -152,7 +145,7 @@ export default function FollowSystem({ username, currentUserId = 1, isOwnProfile
                 <span>{isFollowing ? 'Unfollowing...' : 'Following...'}</span>
               </div>
             ) : (
-              <span>{isFollowing ? 'Following' : 'Follow'}</span>
+              <span>{isFollowing ? 'Unfollow' : 'Follow'}</span>
             )}
           </button>
         )}

@@ -105,6 +105,7 @@ export default function UserProfilePage({ params }) {
                     <Profile 
                       username={username} 
                       onProfileUpdate={handleProfileUpdate}
+                      currentProfileId={currentUser?.id}
                     />
                   </div>
                 )}
@@ -113,7 +114,7 @@ export default function UserProfilePage({ params }) {
                   <div className="space-y-8">
                     {/* User Diary Entries View */}
                     <div className="flex justify-center">
-                      <UserDiaryEntries username={username} />
+                      <UserDiaryEntries username={username} currentProfileId={currentUser?.id}/>
                     </div>
                   </div>
                 )}
@@ -125,6 +126,7 @@ export default function UserProfilePage({ params }) {
               <Profile 
                 username={username} 
                 onProfileUpdate={handleProfileUpdate}
+                currentProfileId={currentUser?.id}
               />
             </div>
           )}

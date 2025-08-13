@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export default function DiaryReactions({ username, diaryId, currentUser = null, currentUserId = 1 }) {
+export default function DiaryReactions({ username, diaryId, currentUser = null }) {
   const [reactions, setReactions] = useState([]);
   const [userReaction, setUserReaction] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,8 +37,8 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
         setReactions(data);
         
         // Find current user's reaction if exists
-        if (currentUserId) {
-          const currentUserReaction = data.find(reaction => reaction.profileId === currentUserId);
+        if (currentUser) {
+          const currentUserReaction = data.find(reaction => reaction.profileId === currentUser.id);
           setUserReaction(currentUserReaction?.reactionType || null);
         }
       } catch (error) {
@@ -51,7 +51,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
     };
 
     fetchReactions();
-  }, [username, diaryId, currentUser, currentUserId]);
+  }, [username, diaryId, currentUser]);
 
   // Handle adding or changing a reaction
   const handleReact = async (reactionType) => {
@@ -76,7 +76,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
       // Update reactions list
       setReactions(prev => {
         // Remove any existing reaction from this user
-        const filtered = prev.filter(r => r.profileId !== currentUserId);
+        const filtered = prev.filter(r => r.profileId !== currentUser.id);
         // Add the new reaction
         return [...filtered, newReaction];
       });
@@ -108,7 +108,7 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
       if (!res.ok) throw new Error('Error removing reaction');
       
       // Update reactions list - remove user's reaction
-      setReactions(prev => prev.filter(r => r.profileId !== currentUserId));
+      setReactions(prev => prev.filter(r => r.profileId !== currentUser.id));
       setUserReaction(null);
     } catch (error) {
       console.error('Error removing reaction:', error);
@@ -172,12 +172,12 @@ export default function DiaryReactions({ username, diaryId, currentUser = null, 
             <button
               key={reactionType.type}
               onClick={() => isActive ? handleUnreact() : handleReact(reactionType.type)}
-              disabled={reacting}
+              disabled={reacting || !currentUser}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                 isActive
                   ? 'bg-blue-100 text-blue-700 border-2 border-blue-300 shadow-sm'
                   : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100 hover:border-gray-300'
-              } ${reacting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'}`}
+              } ${reacting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'} ${!currentUser ? 'pointer-events-none opacity-50' : ''}`}
               title={reactionType.label}
             >
               <span className={`${isActive ? 'scale-110' : ''} transition-transform`}>

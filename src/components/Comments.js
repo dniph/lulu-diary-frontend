@@ -6,7 +6,22 @@ import CommentReactions from './CommentReactions';
 export default function Comments({ username, diaryId, currentUser = null, currentUserId = 1 }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newComment, setNewComment] = useState('');
+      const [newComment, setNewComment] = useState('');
+
+    const fetchComments = async () => {
+        try {
+            const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`);
+            if (res.ok) {
+                const response = await res.json();
+                setComments(response.data); // Assuming the API returns an object with a 'comments' array
+                setCommentsCount(response.data.length);
+            } else {  
+                console.error('Failed to fetch comments');
+            }
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        }
+    };
   const [submitting, setSubmitting] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
@@ -25,8 +40,8 @@ export default function Comments({ username, diaryId, currentUser = null, curren
       try {
         const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`);
         if (!res.ok) throw new Error('Error getting comments');
-        const data = await res.json();
-        setCommentsCount(data.length);
+        const response = await res.json();
+        setCommentsCount(response.data.length);
       } catch (error) {
         console.error('Error fetching comments count:', error);
         setCommentsCount(0);
@@ -43,9 +58,9 @@ export default function Comments({ username, diaryId, currentUser = null, curren
         setLoading(true);
         const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments`);
         if (!res.ok) throw new Error('Error getting comments');
-        const data = await res.json();
-        setComments(data);
-        setCommentsCount(data.length); // Update count when loading full comments
+        const responseData = await res.json();
+        setComments(responseData.data);
+        setCommentsCount(responseData.data.length); // Update count when loading full comments
       } catch (error) {
         console.error('Error fetching comments:', error);
         setComments([]);
@@ -81,9 +96,11 @@ export default function Comments({ username, diaryId, currentUser = null, curren
 
       if (!res.ok) throw new Error('Error sending comment');
       
-      const savedComment = await res.json();
-      setComments(prev => [...prev, savedComment]);
-      setCommentsCount(prev => prev + 1); // Update count
+      // No longer using savedComment from response, refetching all comments instead
+      // const savedComment = await res.json();
+      // setComments(prev => [...prev, savedComment]);
+      // setCommentsCount(prev => prev + 1); // Update count
+      await fetchComments(); // Refetch all comments
       setNewComment('');
     } catch (error) {
       console.error('Error posting comment:', error);
@@ -94,9 +111,6 @@ export default function Comments({ username, diaryId, currentUser = null, curren
   };
 
   const handleDeleteComment = async (commentId) => {
-    const confirmDelete = window.confirm('Delete this comment?');
-    if (!confirmDelete) return;
-
     try {
       const res = await fetch(`/api/lulu-diary/profiles/${username}/diaries/${diaryId}/comments/${commentId}`, {
         method: 'DELETE',
@@ -108,8 +122,7 @@ export default function Comments({ username, diaryId, currentUser = null, curren
 
       if (!res.ok) throw new Error('Error deleting comment');
       
-      setComments(prev => prev.filter(comment => comment.id !== commentId));
-      setCommentsCount(prev => prev - 1); // Update count
+      await fetchComments(); // Refetch all comments after deletion
     } catch (error) {
       console.error('Error deleting comment:', error);
   alert('Error deleting the comment. You can only delete your own comments.');
@@ -148,35 +161,38 @@ export default function Comments({ username, diaryId, currentUser = null, curren
       {showComments && (
         <div className="space-y-4">
           {/* New Comment Form */}
-          <form onSubmit={handleSubmitComment} className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                {(currentUser || 'U')[0].toUpperCase()}
-              </div>
-              <div className="flex-1">
-                <textarea
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Write a comment..."
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  rows="3"
-                  disabled={submitting}
-                />
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-xs text-gray-500">
-                    {currentUser ? `Commenting as ${currentUser}` : 'Anonymous comment'}
-                  </span>
-                  <button
-                    type="submit"
-                    disabled={!newComment.trim() || submitting}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
-                  >
-                    {submitting ? 'Sending...' : '💬 Comment'}
-                  </button>
+          {/* New Comment Form */}
+          {currentUser && (
+            <form onSubmit={handleSubmitComment} className="bg-gray-50 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                  {(currentUser.username || 'U')[0].toUpperCase()}
+                </div>
+                <div className="flex-1">
+                  <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Write a comment..."
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    rows="3"
+                    disabled={submitting}
+                  />
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="text-xs text-gray-500">
+                      {currentUser ? `Commenting as ${currentUser.username}` : 'Anonymous comment'}
+                    </span>
+                    <button
+                      type="submit"
+                      disabled={!newComment.trim() || submitting}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                    >
+                      {submitting ? 'Sending...' : '💬 Comment'}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
 
           {/* Comments List */}
           {loading ? (
@@ -192,26 +208,26 @@ export default function Comments({ username, diaryId, currentUser = null, curren
             </div>
           ) : (
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              {comments.map((comment) => (
-                <div key={comment.id} className="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-sm transition-shadow">
+              {comments.map((data) => (
+                <div key={data.comment.id} className="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-sm transition-shadow">
                   <div className="flex items-start gap-3">
                     <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                      {(comment.author || 'U')[0].toUpperCase()}
+                      {(data.profile?.displayName || data.profile?.username || 'U')[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-gray-900 text-sm">
-                            {comment.author || 'Anonymous user'}
+                            {data.profile?.displayName || data.profile?.username || 'Anonymous user'}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {formatDate(comment.createdAt)}
+                            {formatDate(data.comment.createdAt)}
                           </span>
                         </div>
                         {/* Delete button - TODO: Only show for comment author or diary owner */}
-                        {(currentUser === comment.author || currentUser === username) && (
+                        {(currentUser?.id === data.profile.id) && (
                           <button
-                            onClick={() => handleDeleteComment(comment.id)}
+                            onClick={() => handleDeleteComment(data.comment.id)}
                             className="text-gray-400 hover:text-red-500 transition-colors p-1"
                             title="Delete comment"
                           >
@@ -220,11 +236,11 @@ export default function Comments({ username, diaryId, currentUser = null, curren
                         )}
                       </div>
                       <p className="text-gray-700 text-sm leading-relaxed break-words">
-                        {comment.content}
+                        {data.comment.content}
                       </p>
-                      {comment.updatedAt && comment.updatedAt !== comment.createdAt && (
+                      {data.comment.updatedAt && data.comment.updatedAt !== data.comment.createdAt && (
                         <p className="text-xs text-gray-400 mt-1 italic">
-                          Edited on {formatDate(comment.updatedAt)}
+                          Edited on {formatDate(data.comment.updatedAt)}
                         </p>
                       )}
                       
@@ -232,9 +248,8 @@ export default function Comments({ username, diaryId, currentUser = null, curren
                       <CommentReactions 
                         username={username}
                         diaryId={diaryId}
-                        commentId={comment.id}
+                        commentId={data.comment.id}
                         currentUser={currentUser}
-                        currentUserId={currentUserId}
                       />
                     </div>
                   </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export default function CommentReactions({ username, diaryId, commentId, currentUser = null, currentUserId = 1 }) {
+export default function CommentReactions({ username, diaryId, commentId, currentUser = null }) {
   const [reactions, setReactions] = useState([]);
   const [userReaction, setUserReaction] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -10,12 +10,12 @@ export default function CommentReactions({ username, diaryId, commentId, current
 
   // Available reaction types with emojis (same as diary reactions)
   const reactionTypes = [
-    { type: 'like', emoji: '👍', label: 'Me gusta' },
-    { type: 'love', emoji: '❤️', label: 'Me encanta' },
-    { type: 'laugh', emoji: '😄', label: 'Divertido' },
-    { type: 'sad', emoji: '😢', label: 'Triste' },
-    { type: 'angry', emoji: '😠', label: 'Enojado' },
-    { type: 'surprised', emoji: '😮', label: 'Sorprendido' }
+    { type: 'like', emoji: '👍', label: 'Like' },
+    { type: 'love', emoji: '❤️', label: 'Love' },
+    { type: 'laugh', emoji: '😄', label: 'Funny' },
+    { type: 'sad', emoji: '😢', label: 'Sad' },
+    { type: 'angry', emoji: '😠', label: 'Angry' },
+    { type: 'surprised', emoji: '😮', label: 'Surprised' }
   ];
 
   // Reset reactions when commentId changes
@@ -37,8 +37,8 @@ export default function CommentReactions({ username, diaryId, commentId, current
         setReactions(data);
         
         // Find current user's reaction if exists
-        if (currentUserId) {
-          const currentUserReaction = data.find(reaction => reaction.profileId === currentUserId);
+        if (currentUser) {
+          const currentUserReaction = data.find(reaction => reaction.profileId === currentUser.id);
           setUserReaction(currentUserReaction?.reactionType || null);
         }
       } catch (error) {
@@ -51,7 +51,7 @@ export default function CommentReactions({ username, diaryId, commentId, current
     };
 
     fetchReactions();
-  }, [username, diaryId, commentId, currentUser, currentUserId]);
+  }, [username, diaryId, commentId, currentUser]);
 
   // Handle adding or changing a reaction
   const handleReact = async (reactionType) => {
@@ -76,7 +76,7 @@ export default function CommentReactions({ username, diaryId, commentId, current
       // Update reactions list
       setReactions(prev => {
         // Remove any existing reaction from this user
-        const filtered = prev.filter(r => r.profileId !== currentUserId);
+        const filtered = prev.filter(r => r.profileId !== currentUser.id);
         // Add the new reaction
         return [...filtered, newReaction];
       });
@@ -108,7 +108,7 @@ export default function CommentReactions({ username, diaryId, commentId, current
       if (!res.ok) throw new Error('Error al quitar reacción del comentario');
       
       // Update reactions list - remove user's reaction
-      setReactions(prev => prev.filter(r => r.profileId !== currentUserId));
+      setReactions(prev => prev.filter(r => r.profileId !== currentUser.id));
       setUserReaction(null);
     } catch (error) {
       console.error('Error removing comment reaction:', error);
@@ -172,12 +172,12 @@ export default function CommentReactions({ username, diaryId, commentId, current
             <button
               key={reactionType.type}
               onClick={() => isActive ? handleUnreact() : handleReact(reactionType.type)}
-              disabled={reacting}
+              disabled={reacting || !currentUser}
               className={`flex items-center gap-0.5 px-2 py-1 rounded-full text-xs font-medium transition-all ${
                 isActive
                   ? 'bg-blue-50 text-blue-600 border border-blue-200'
                   : 'bg-gray-50 text-gray-500 border border-gray-100 hover:bg-gray-100'
-              } ${reacting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-sm'}`}
+              } ${reacting ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-sm'} ${!currentUser ? 'pointer-events-none opacity-50' : ''}`}
               title={reactionType.label}
             >
               <span className={`text-xs ${isActive ? 'scale-105' : ''} transition-transform`}>
@@ -197,31 +197,19 @@ export default function CommentReactions({ username, diaryId, commentId, current
       {totalReactions > 0 && (
         <div className="mt-2 pt-1 border-t border-gray-50">
           <details className="group">
-            <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">
-              Ver quién reaccionó ▼
+            <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-700 transition-colors">
+              See who reacted ▼
             </summary>
-            <div className="mt-1 space-y-0.5 max-h-24 overflow-y-auto">
-              {groupedReactions.map(reactionType => {
-                // Get users who reacted with this type
-                const usersWithReaction = reactions.filter(r => r.reactionType === reactionType.type);
-                
-                return (
-                  <div key={reactionType.type} className="text-xs text-gray-500">
-                    <span className="inline-flex items-center gap-1">
-                      <span>{reactionType.emoji}</span>
-                      <span className="font-medium">{reactionType.label}:</span>
-                      <span>
-                        {usersWithReaction.map((reaction, index) => (
-                          <span key={reaction.profileId}>
-                            {reaction.profileName || `User ${reaction.profileId}`}
-                            {index < usersWithReaction.length - 1 ? ', ' : ''}
-                          </span>
-                        ))}
-                      </span>
-                    </span>
-                  </div>
-                );
-              })}
+            <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
+              {groupedReactions.map(reactionType => (
+                <div key={reactionType.type} className="text-xs text-gray-600">
+                  <span className="inline-flex items-center gap-1">
+                    <span>{reactionType.emoji}</span>
+                    <span className="font-medium">{reactionType.label}:</span>
+                    <span>{reactionType.count} {reactionType.count === 1 ? 'person' : 'people'}</span>
+                  </span>
+                </div>
+              ))}
             </div>
           </details>
         </div>
