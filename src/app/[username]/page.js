@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Profile from "@/components/Profile";
+import UserDiaryEntries from "@/components/UserDiaryEntries";
 
 
 export default function UserProfilePage({ params }) {
@@ -76,13 +77,64 @@ export default function UserProfilePage({ params }) {
           <div className="flex items-center justify-between mb-6">
           </div>
           
-          {/* Only Profile Content (no tabs) */}
-          <div className="w-full flex justify-center">
-            <Profile 
-              username={username} 
-              onProfileUpdate={handleProfileUpdate}
-            />
-          </div>
+          {!isOwnProfile ? (
+            <>
+              {/* Tab Navigation - Only for viewing other users' profiles */}
+              <div className="flex justify-center mb-8">
+                <div className="bg-white p-2 rounded-lg shadow-md">
+                  <button
+                    onClick={() => setActiveTab('profile')}
+                    className={`px-6 py-3 rounded-md font-medium transition ${
+                      activeTab === 'profile'
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                    }`}
+                  >
+                    👤 Profile
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('diary')}
+                    className={`px-6 py-3 rounded-md font-medium transition ${
+                      activeTab === 'diary'
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                    }`}
+                  >
+                    📖 Diary
+                  </button>
+                </div>
+              </div>
+
+              {/* Tab Content */}
+              <div className="w-full">
+                {activeTab === 'profile' && (
+                  <div className="flex justify-center">
+                    <Profile 
+                      username={username} 
+                      onProfileUpdate={handleProfileUpdate}
+                    />
+                  </div>
+                )}
+
+                {activeTab === 'diary' && (
+                  <div className="space-y-8">
+                    {/* User Diary Entries View */}
+                    <div className="flex justify-center">
+                      <UserDiaryEntries username={username} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            /* Own Profile - Show only profile content */
+            <div className="w-full flex justify-center">
+              <Profile 
+                username={username} 
+                onProfileUpdate={handleProfileUpdate}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
