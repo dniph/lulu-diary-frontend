@@ -32,22 +32,28 @@ async function handler(request, { params }) {
   try {
     // Use our centralized apiFetch helper
     const res = await apiFetch(fullPath, options);
-    const data = await res.text(); // Read as text to handle all response types
-
+    const hasBody = res.status !== 204 && res.status !== 304;
+    const data = hasBody ? await res.text() : "";
     // Forward the response status and headers from the backend
     const responseHeaders = {};
     res.headers.forEach((value, key) => {
       responseHeaders[key] = value;
     });
 
-    // Try to parse as JSON, but fall back to text if it fails
-    try {
-      return NextResponse.json(JSON.parse(data), { 
-        status: res.status,
-        headers: responseHeaders
-      });
-    } catch (e) {
-      return new NextResponse(data, { 
+    if (data) {
+      try {
+        return NextResponse.json(JSON.parse(data), {
+          status: res.status,
+          headers: responseHeaders
+        });
+      } catch (e) {
+        return new NextResponse(data, {
+          status: res.status,
+          headers: responseHeaders
+        });
+      }
+    } else {
+      return new NextResponse(null, {
         status: res.status,
         headers: responseHeaders
       });

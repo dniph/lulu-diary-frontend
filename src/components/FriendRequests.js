@@ -67,7 +67,6 @@ export default function FriendRequests({ currentUserId = 1 }) {
       
       const newRequest = await res.json();
       setOutgoingRequests(prev => [...prev, newRequest]);
-      alert('Solicitud de amistad enviada!');
     } catch (error) {
       console.error('Error sending friend request:', error);
       alert('Error al enviar la solicitud de amistad.');
@@ -94,7 +93,6 @@ export default function FriendRequests({ currentUserId = 1 }) {
       
       // Remove from incoming requests
       setIncomingRequests(prev => prev.filter(req => req.id !== requestId));
-      alert('Solicitud de amistad aceptada!');
     } catch (error) {
       console.error('Error accepting friend request:', error);
       alert('Error al aceptar la solicitud de amistad.');
@@ -121,7 +119,6 @@ export default function FriendRequests({ currentUserId = 1 }) {
       
       // Remove from incoming requests
       setIncomingRequests(prev => prev.filter(req => req.id !== requestId));
-      alert('Solicitud de amistad rechazada.');
     } catch (error) {
       console.error('Error rejecting friend request:', error);
       alert('Error al rechazar la solicitud de amistad.');
